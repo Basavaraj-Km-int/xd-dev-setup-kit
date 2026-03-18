@@ -625,8 +625,8 @@ New projects created from the template always get the latest version. Existing p
 
 ---
 
-## Contributing
+## Updates
 
-To update the template files, edit them in this repo and push. Every new project created from this template will get the latest versions.
+This template is updated regularly based on learnings from all workstreams — new IDS components, improved workflows, better prompts, and fixes.
 
-For questions or feedback, reach out to the Design Technology team.
+For questions, feedback, or to share what worked for your team, reach out to **Basavaraj** (basavaraj_km@intuit.com).
