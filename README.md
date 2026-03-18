@@ -22,7 +22,13 @@ node --version
 ```
 If you see a version number (e.g., `v22.x.x`) — you're good, skip to the next tool.
 
-If you see "command not found" — install it: [Download from nodejs.org](https://nodejs.org/) — click the **LTS** button, run the installer. Then close and reopen Terminal.
+If you see "command not found" — install it. Run in Terminal:
+```bash
+brew install node
+```
+> Don't have Homebrew? Install it first: go to [brew.sh](https://brew.sh/) and copy-paste the install command into Terminal.
+
+Or [download from nodejs.org](https://nodejs.org/) — click the **LTS** button, run the installer. Then close and reopen Terminal.
 
 **2. Git**
 
