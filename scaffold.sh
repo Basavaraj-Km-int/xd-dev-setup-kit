@@ -23,8 +23,12 @@ echo ""
 echo "📦 Creating React + TypeScript project..."
 
 # Create Vite project in a temp folder, then move contents here
-TEMP_DIR=$(mktemp -d)
-npm create vite@latest "$TEMP_DIR/app" -- --template react-ts 2>/dev/null
+TEMP_DIR="/tmp/xd-scaffold-$$"
+rm -rf "$TEMP_DIR"
+mkdir -p "$TEMP_DIR"
+
+# Vite needs to run from /tmp to avoid relative path issues
+(cd /tmp && npm create vite@latest "xd-scaffold-$$/app" -- --template react-ts)
 
 # Move Vite files into current directory (skip files we already have)
 cp -n "$TEMP_DIR/app/package.json" ./package.json 2>/dev/null || true
@@ -37,7 +41,7 @@ cp -n "$TEMP_DIR/app/index.html" ./index.html 2>/dev/null || true
 cp -rn "$TEMP_DIR/app/src/" ./src/ 2>/dev/null || true
 cp -rn "$TEMP_DIR/app/public/" ./public/ 2>/dev/null || true
 
-# Copy .gitignore from Vite (merge with ours if needed)
+# Copy .gitignore from Vite
 if [ -f "$TEMP_DIR/app/.gitignore" ]; then
   cp "$TEMP_DIR/app/.gitignore" ./.gitignore
 fi
