@@ -12,14 +12,44 @@ You only need to do this once on your Mac. After that, every new project takes 2
 
 ### Step 1: Install the tools
 
-| # | Tool | How to check if you have it | How to install |
-|---|------|----------------------------|----------------|
-| 1 | **Node.js 18+** | Open Terminal, type `node --version` | [Download from nodejs.org](https://nodejs.org/) — click the LTS button, run the installer |
-| 2 | **Git** | `git --version` | [Download from git-scm.com](https://git-scm.com/downloads) — or on Mac: `xcode-select --install` |
-| 3 | **GitHub CLI** | `gh --version` | `brew install gh` — or [Download from cli.github.com](https://cli.github.com/) |
-| 4 | **Claude Code** | `claude --version` | Open Terminal, run: `npm install -g @anthropic-ai/claude-code` |
-
 > **How to open Terminal on Mac**: Press `Cmd + Space`, type "Terminal", press Enter.
+
+**1. Node.js 18+**
+
+Check: `node --version` — if you see a version number (e.g., `v22.x.x`), you're good.
+
+If not installed: [Download from nodejs.org](https://nodejs.org/) — click the **LTS** button, run the installer.
+
+**2. Git**
+
+Check: `git --version` — if you see a version number, you're good.
+
+If not installed, run in Terminal:
+```bash
+xcode-select --install
+```
+A popup appears — click **"Install"** and wait for it to finish.
+
+**3. GitHub CLI**
+
+Check: `gh --version`
+
+If not installed, run in Terminal:
+```bash
+brew install gh
+```
+> Don't have Homebrew? Install it first: go to [brew.sh](https://brew.sh/) and copy-paste the install command into Terminal.
+
+Or [download from cli.github.com](https://cli.github.com/).
+
+**4. Claude Code**
+
+Check: `claude --version`
+
+If not installed, run in Terminal:
+```bash
+npm install -g @anthropic-ai/claude-code
+```
 
 ### Step 2: Log in to GitHub (one-time)
 
