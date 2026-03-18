@@ -319,6 +319,45 @@ Tell Claude Code what to change in plain language. Be specific about what you wa
 
 Claude Code makes the changes and you see them instantly in the browser (the page auto-refreshes).
 
+### Step 7: Send to Figma and iterate with your team
+
+Once your prototype looks good, send it to Figma so your team can review and annotate:
+
+**Send code → Figma canvas:**
+
+> "Capture the UI in a new Figma file"
+
+Claude Code opens a browser with a capture toolbar. Click **"Entire screen"** to capture the current screen, or **"Select element"** to capture a specific component. Capture each screen and state separately:
+
+> "Capture the onboarding step 1"
+> "Also capture step 2 and step 3"
+> "Now capture the dashboard with data"
+> "Capture the dashboard empty state"
+
+When you're done capturing, click **"Open file"** in the toolbar — your Figma file is ready to share.
+
+**Team reviews in Figma** → your team adds comments, annotations, and suggestions directly on the Figma frames.
+
+**Bring Figma changes back → code:**
+
+After your team makes design changes in Figma, bring them back to the prototype:
+
+> "The team updated the Figma design. Here's the new version: https://figma.com/design/YOUR-FILE-URL — update the prototype to match"
+
+Or for a specific screen:
+
+> "Update the dashboard to match this Figma frame: https://figma.com/design/YOUR-FILE-URL?node-id=123:456"
+
+Claude Code reads the updated Figma design, compares it with the current code, and makes the changes. You see the updates in your browser instantly.
+
+**The full loop:**
+
+```
+Code prototype → Capture to Figma → Team reviews → Figma changes → Update code → Repeat
+```
+
+This is how design and code stay in sync — no manual handoff, no redlines, no "is this the latest version?" confusion.
+
 ---
 
 ## Sharing Your Prototype
