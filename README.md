@@ -99,59 +99,47 @@ Open Terminal and run this command. It downloads the template into a folder call
 git clone https://github.com/Basavaraj-Km-int/design-prototype-template.git
 ```
 
-**Step 2: Go into the template folder**
+**Step 2: Rename the folder to your project name**
+
+Replace `your-project-name` with a name that describes your prototype — use **lowercase letters and dashes** (no spaces).
 
 ```bash
-cd design-prototype-template
+mv design-prototype-template your-project-name
 ```
 
-**Step 3: Run the scaffold script to create your project**
-
-This is where you choose your project's name. Pick a name that describes your prototype — use **lowercase letters and dashes** (no spaces).
-
-Good names: `payroll-onboarding`, `expense-tracker-redesign`, `invoice-approval-flow`
-
-Run the script with your chosen name:
-
+For example:
 ```bash
-./scaffold.sh your-project-name
+mv design-prototype-template payroll-onboarding
 ```
 
-For example, if you're prototyping a payroll onboarding flow:
+> This renames the folder from `design-prototype-template` to your project name (e.g., `payroll-onboarding`).
 
-```bash
-./scaffold.sh payroll-onboarding
-```
-
-The script creates a **new folder** with your project name (e.g., `payroll-onboarding/`) right next to the template folder. Inside it:
-- A React + TypeScript project ready to run
-- CLAUDE.md and agents.md with all the design system rules
-- Empty PRD and design doc templates for you to fill in
-- IDS design system clone (for Claude Code to reference components)
-- All dependencies installed
-
-**Step 4: Go into your new project folder**
+**Step 3: Go into your project folder**
 
 ```bash
 cd your-project-name
 ```
 
-For the example above:
-
+For example:
 ```bash
 cd payroll-onboarding
 ```
 
-> **Where is my project?** It's at `/Users/you/design-prototype-template/payroll-onboarding/`. You can also find it in Finder by navigating to your home folder.
+**Step 4: Run the scaffold script to set up the project**
 
-**Step 5 (optional): Clean up the template folder**
-
-You don't need the `design-prototype-template` folder anymore — your project is its own standalone folder now. You can keep it around for creating more projects later, or delete it:
+This installs dependencies, creates the folder structure, and clones the IDS design system:
 
 ```bash
-cd ..
-rm -rf design-prototype-template
+./scaffold.sh
 ```
+
+The script will:
+- Set up React + TypeScript inside your project folder
+- Create the `src/` folder structure (components, pages, layouts, mocks, etc.)
+- Clone the IDS design system (for Claude Code to reference components)
+- Install all dependencies
+
+> **If the script asks for your project name**, just press Enter to use the folder name you already chose in Step 2.
 
 **Done! Your project is ready.** Jump to [How to Use](#how-to-use) below.
 
