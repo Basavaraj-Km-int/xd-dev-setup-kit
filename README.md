@@ -576,18 +576,6 @@ You write PRD  ──>  Claude Code generates design.md  ──>  You review & a
 
 ---
 
-## Using with Other AI Agents
-
-This template works with any AI coding agent. Claude Code is recommended (reads `CLAUDE.md` automatically), but you can use others:
-
-| Agent | How to set up |
-|-------|--------------|
-| **Claude Code** | Just run `claude` in the project folder. That's it. |
-| **Cursor** | Open the project in Cursor. Copy `agents.md` → rename to `.cursorrules` in the project root. |
-| **Windsurf** | Open the project in Windsurf. Copy `agents.md` → rename to `.windsurfrules` in the project root. |
-| **GitHub Copilot** | Create folder `.github/` in project root. Copy `agents.md` → rename to `copilot-instructions.md` inside `.github/`. |
-| **Bolt / v0 / Lovable** | Open `agents.md`, copy the first 5 sections, paste into your first prompt in the tool. |
-
 ---
 
 ## FAQ
