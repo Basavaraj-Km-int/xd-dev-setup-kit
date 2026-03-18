@@ -629,4 +629,4 @@ New projects created from the template always get the latest version. Existing p
 
 This template is updated regularly based on learnings from all workstreams — new IDS components, improved workflows, better prompts, and fixes.
 
-For questions, feedback, or to share what worked for your team, reach out to **Basavaraj** (basavaraj_km@intuit.com).
+For questions, feedback, or to share what worked for your team, reach out to **Basavaraj** (basavaraj_km@intuit.com), GTM Tech XD Team.
