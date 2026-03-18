@@ -196,9 +196,21 @@ git clone --depth 1 https://github.intuit.com/design-systems/ids-web.git int-des
 
 ## How to Use
 
-### Step 1: Fill in your PRD
+### Step 1: Open the project in VS Code
 
-Open the file `docs/PRD.md` in any text editor (VS Code, TextEdit, or even in GitHub).
+From Terminal (make sure you're in your project folder):
+
+```bash
+code .
+```
+
+This opens VS Code with your entire project. You'll see the folder structure in the left sidebar.
+
+> **Don't have VS Code?** [Download from code.visualstudio.com](https://code.visualstudio.com/). After installing, open VS Code, press `Cmd + Shift + P`, type "shell command", and click **"Install 'code' command in PATH"** — this lets you open VS Code from Terminal.
+
+### Step 2: Fill in your PRD
+
+In VS Code, click on `docs/PRD.md` in the left sidebar to open it.
 
 **Option A**: Fill in the template sections directly — each section has `[placeholder]` text to replace.
 
@@ -206,9 +218,10 @@ Open the file `docs/PRD.md` in any text editor (VS Code, TextEdit, or even in Gi
 1. In Google Docs: **File > Download > Markdown (.md)**
 2. Open the downloaded `.md` file in any text editor
 3. Select all (`Cmd + A`), copy (`Cmd + C`)
-4. Open `docs/PRD.md`, select all, paste (`Cmd + V`)
+4. In VS Code, click on `docs/PRD.md`, select all (`Cmd + A`), paste (`Cmd + V`)
+5. Save: `Cmd + S`
 
-### Step 2: Open Claude Code
+### Step 3: Open Claude Code
 
 Make sure you're in your project folder in Terminal. If you just ran the scaffold, you're already there. If not:
 
@@ -240,7 +253,7 @@ The `>` is where you type your instructions to Claude Code. It has already read 
 
 **If you see a permission prompt** — Claude Code may ask to read files or run commands. Type `y` (yes) to allow it. These are safe operations like reading your PRD or starting the dev server.
 
-### Step 3: Tell Claude Code what to do
+### Step 4: Tell Claude Code what to do
 
 Type one of these prompts (or write your own):
 
@@ -260,11 +273,11 @@ Claude Code will:
 4. Build the prototype screen-by-screen using IDS components
 5. Start the dev server so you can see it in your browser
 
-### Step 4: Review in your browser
+### Step 5: Review in your browser
 
 Claude Code will start a dev server and show you a URL (usually http://localhost:5173). Open it in your browser to see the prototype.
 
-### Step 5: Iterate
+### Step 6: Iterate
 
 Tell Claude Code what to change in plain language:
 
