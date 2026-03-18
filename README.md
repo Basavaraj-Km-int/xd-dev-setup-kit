@@ -229,35 +229,17 @@ In VS Code, click on `docs/PRD.md` in the left sidebar to open it.
 
 ### Step 3: Open Claude Code
 
-Make sure you're in your project folder in Terminal. If you just ran the scaffold, you're already there. If not:
+Your project is already open in VS Code from Step 1. Now open Claude Code inside VS Code:
 
-```bash
-cd your-project-name
-```
+1. Press `Cmd + Shift + P` to open the Command Palette
+2. Type **"Claude"** and select **"Claude Code: Open"** (or **"Claude Code: Focus"**)
+3. The Claude Code chat panel opens in VS Code — usually on the right side or bottom
 
-Then start Claude Code:
+> **Don't see Claude Code?** Install the extension: click the Extensions icon in VS Code's left sidebar (or `Cmd + Shift + X`), search for **"Claude Code"**, and click **Install**. Then try again.
 
-```bash
-claude
-```
+Claude Code has already read the `CLAUDE.md` file in your project, so it knows about the IDS design system, accessibility rules, D4D framework, and the Figma integration.
 
-You'll see something like this appear in your Terminal:
-
-```
-╭──────────────────────────────────────────────╮
-│ ✻ Welcome to Claude Code                     │
-│                                              │
-│   /help for help, /status for your plan      │
-│                                              │
-│   cwd: /Users/you/your-project-name          │
-╰──────────────────────────────────────────────╯
-
->
-```
-
-The `>` is where you type your instructions to Claude Code. It has already read the `CLAUDE.md` file in your project, so it knows about the IDS design system, accessibility rules, D4D framework, and the Figma integration.
-
-**If you see a permission prompt** — Claude Code may ask to read files or run commands. Type `y` (yes) to allow it. These are safe operations like reading your PRD or starting the dev server.
+**If you see a permission prompt** — Claude Code may ask to read files or run commands. Click **"Allow"** to permit it. These are safe operations like reading your PRD or starting the dev server.
 
 ### Step 4: Tell Claude Code what to do
 
