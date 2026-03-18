@@ -1,6 +1,6 @@
 # Design Prototype Template
 
-A one-command scaffolding tool for Intuit Product Designers to create interactive UI prototypes powered by AI coding agents (Claude Code, Cursor, Windsurf, Copilot).
+A one-command scaffolding tool for Intuit Product Designers to create interactive UI prototypes powered by AI coding agents / Claude Code.
 
 **No coding experience required.** Write your PRD, open Claude Code, and start building.
 
