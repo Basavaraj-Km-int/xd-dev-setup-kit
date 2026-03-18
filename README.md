@@ -270,10 +270,30 @@ Claude Code can deploy to Vercel or similar services for a shareable URL.
 
 ### Share via screen recording
 
-1. Run `npm run dev` in Terminal
+Record yourself walking through the prototype and share the video with your team.
+
+**Option A: Quick screen recording (Mac built-in)**
+1. Run `npm run dev` in Terminal (your prototype opens at http://localhost:5173)
 2. Open the URL in your browser
-3. Use Mac's built-in screen recording: `Cmd + Shift + 5` > "Record Selected Portion"
-4. Walk through the flows and share the recording
+3. Press `Cmd + Shift + 5` on your keyboard
+4. Click **"Record Selected Portion"** in the toolbar that appears at the bottom
+5. Drag to select your browser window
+6. Click **"Record"**
+7. Walk through all the flows in the prototype
+8. Click the **stop button** in the menu bar (top right) when done
+9. The recording saves to your Desktop as a `.mov` file — share it via Slack, email, or Google Drive
+
+**Option B: QuickTime Player (more control)**
+1. Run `npm run dev` in Terminal
+2. Open **QuickTime Player** (press `Cmd + Space`, type "QuickTime", press Enter)
+3. Click **File > New Screen Recording** in the menu bar
+4. Click the dropdown arrow next to the record button to select audio options (if you want to narrate)
+5. Click the **red record button**
+6. Click your browser window to record just that window, or click anywhere to record the full screen
+7. Walk through all the flows in the prototype
+8. Click the **stop button** in the menu bar (top right) when done
+9. **File > Save** — choose a name like "payroll-prototype-walkthrough.mov"
+10. Share via Slack, email, or Google Drive
 
 ---
 
