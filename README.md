@@ -198,13 +198,19 @@ git clone --depth 1 https://github.intuit.com/design-systems/ids-web.git int-des
 
 ### Step 1: Open the project in VS Code
 
-From Terminal (make sure you're in your project folder):
+From Terminal, make sure you're in your project folder. For example:
+
+```bash
+cd payroll-onboarding
+```
+
+Then open it in VS Code:
 
 ```bash
 code .
 ```
 
-This opens VS Code with your entire project. You'll see the folder structure in the left sidebar.
+This opens VS Code with your entire project. You'll see the folder structure in the left sidebar — `docs/`, `src/`, `CLAUDE.md`, etc.
 
 > **Don't have VS Code?** [Download from code.visualstudio.com](https://code.visualstudio.com/). After installing, open VS Code, press `Cmd + Shift + P`, type "shell command", and click **"Install 'code' command in PATH"** — this lets you open VS Code from Terminal.
 
