@@ -49,35 +49,40 @@ A browser opens → log in with your Intuit credentials → click "Authorize" �
 
 ## Creating a New Project
 
-### Option A: GitHub Template (Recommended)
+### Scaffold with Script (Recommended)
 
-This is the easiest way. You click a button on GitHub and get a fresh project.
+One command creates the full project — Vite + React + TypeScript, all template files, IDS design system clone, and dependencies installed.
 
-**Step 1: Create your repo from the template**
+**Step 1: Clone this template repo**
 
-1. Go to this repo on GitHub: [design-prototype-template](https://github.com/Basavaraj-Km-int/design-prototype-template)
-2. Click the green **"Use this template"** button (top right)
-3. Click **"Create a new repository"**
-4. Fill in:
-   - **Repository name**: Your project name, e.g., `payroll-onboarding-prototype` or `expense-tracker-redesign`
-   - **Description** (optional): Brief description, e.g., "Prototype for new payroll onboarding flow"
-   - **Public or Private**: Choose Private for internal prototypes
-5. Click **"Create repository"**
-
-**Step 2: Clone it to your computer**
-
-Open Terminal and run (replace `YOUR-USERNAME` and `your-project-name` with your actual values):
+Open Terminal and run:
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/your-project-name.git
+git clone https://github.com/Basavaraj-Km-int/design-prototype-template.git
+cd design-prototype-template
+```
+
+**Step 2: Run the scaffold script**
+
+Replace `your-project-name` with your actual project name (use lowercase, dashes instead of spaces):
+
+```bash
+./scaffold.sh your-project-name
 ```
 
 Example:
 ```bash
-git clone https://github.com/Basavaraj-Km-int/payroll-onboarding-prototype.git
+./scaffold.sh payroll-onboarding-prototype
 ```
 
-**Step 3: Go into the project folder**
+The script will:
+- Create a new React + TypeScript project
+- Copy CLAUDE.md, agents.md, PRD template, and design doc template
+- Clone the IDS design system (for component reference)
+- Install all dependencies
+- Show you the next steps
+
+**Step 3: Go into your new project**
 
 ```bash
 cd your-project-name
@@ -88,47 +93,56 @@ Example:
 cd payroll-onboarding-prototype
 ```
 
-**Step 4: Install dependencies**
+**Done! Your project is ready.** Jump to [How to Use](#how-to-use) below.
+
+---
+
+### Manual Setup (If Script Doesn't Work)
+
+If the scaffold script fails or you prefer to do it step by step:
+
+<details>
+<summary>Click to expand manual setup steps</summary>
+
+**Step 1: Create your repo from the template**
+
+1. Go to this repo on GitHub: [design-prototype-template](https://github.com/Basavaraj-Km-int/design-prototype-template)
+2. Click the green **"Use this template"** button (top right)
+3. Click **"Create a new repository"**
+4. Fill in:
+   - **Repository name**: Your project name (e.g., `payroll-onboarding-prototype`)
+   - **Description** (optional): e.g., "Prototype for new payroll onboarding flow"
+   - **Public or Private**: Choose Private for internal prototypes
+5. Click **"Create repository"**
+
+**Step 2: Clone it to your computer**
+
+Open Terminal and run (replace `YOUR-USERNAME` and `your-project-name`):
+
+```bash
+git clone https://github.com/YOUR-USERNAME/your-project-name.git
+cd your-project-name
+```
+
+**Step 3: Install dependencies**
 
 ```bash
 npm install
 ```
 
-This downloads the libraries needed to run the prototype. Takes about 30 seconds.
+Takes about 30 seconds.
 
-**Step 5: Clone the IDS design system**
-
-This gives Claude Code access to read IDS component documentation locally.
+**Step 4: Clone the IDS design system**
 
 ```bash
 git clone --depth 1 https://github.intuit.com/design-systems/ids-web.git int-design-system
 ```
 
-> If this fails with an authentication error, go back to "Log in to GitHub" in Prerequisites and make sure you completed the `gh auth login --hostname github.intuit.com` step.
+> If this fails, run `gh auth login --hostname github.intuit.com` first, then try again.
 
-**Done! Your project is ready.** Jump to [How to Use](#how-to-use) below.
+**Done!**
 
-### Option B: Scaffold with Script
-
-If you prefer a single command that does everything (creates a Vite project, copies files, clones IDS, installs dependencies):
-
-```bash
-git clone https://github.com/Basavaraj-Km-int/design-prototype-template.git
-cd design-prototype-template
-./scaffold.sh your-project-name
-```
-
-Example:
-```bash
-./scaffold.sh payroll-onboarding-prototype
-```
-
-Then:
-```bash
-cd payroll-onboarding-prototype
-```
-
-**Done! Your project is ready.**
+</details>
 
 ---
 
@@ -148,13 +162,35 @@ Open the file `docs/PRD.md` in any text editor (VS Code, TextEdit, or even in Gi
 
 ### Step 2: Open Claude Code
 
-In Terminal, make sure you're in your project folder, then:
+Make sure you're in your project folder in Terminal. If you just ran the scaffold, you're already there. If not:
+
+```bash
+cd your-project-name
+```
+
+Then start Claude Code:
 
 ```bash
 claude
 ```
 
-You'll see the Claude Code prompt `>` appear.
+You'll see something like this appear in your Terminal:
+
+```
+╭──────────────────────────────────────────────╮
+│ ✻ Welcome to Claude Code                     │
+│                                              │
+│   /help for help, /status for your plan      │
+│                                              │
+│   cwd: /Users/you/your-project-name          │
+╰──────────────────────────────────────────────╯
+
+>
+```
+
+The `>` is where you type your instructions to Claude Code. It has already read the `CLAUDE.md` file in your project, so it knows about the IDS design system, accessibility rules, D4D framework, and the Figma integration.
+
+**If you see a permission prompt** — Claude Code may ask to read files or run commands. Type `y` (yes) to allow it. These are safe operations like reading your PRD or starting the dev server.
 
 ### Step 3: Tell Claude Code what to do
 
