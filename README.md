@@ -83,6 +83,26 @@ gh auth login
 
 A browser opens → click "Authorize" → come back to Terminal. That's it.
 
+### Step 3: Set up Figma MCP (one-time)
+
+This connects Claude Code to Figma so it can read your designs and send prototypes back to Figma. Without this, the Figma integration won't work.
+
+Open Terminal and run:
+
+```bash
+claude mcp add --transport http figma-remote-mcp https://mcp.figma.com/mcp
+```
+
+You should see: `Added HTTP MCP server figma-remote-mcp`
+
+> **What is MCP?** It's how Claude Code connects to external tools like Figma. You only need to set this up once — it works across all your projects.
+
+To verify it's working, open Claude Code and type:
+
+> "List my Figma MCP tools"
+
+If you see tools like `get_design_context` and `generate_figma_design` listed, you're good.
+
 ---
 
 ## Creating a New Project
