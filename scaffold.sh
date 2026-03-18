@@ -1,49 +1,58 @@
 #!/bin/bash
-# Intuit Design Prototype Scaffolding
-# Usage: ./scaffold.sh my-prototype-name
+# XD Dev Setup Kit — Intuit Design Prototype Scaffolding
+# Usage: Clone the template, rename the folder, cd into it, then run ./scaffold.sh
 #
 # Prerequisites:
 #   - Node.js 18+ (check: node --version)
-#   - Git authenticated with github.intuit.com (see below)
-#
-# GitHub Enterprise Authentication (one-time setup):
-#   Option 1 (recommended): gh auth login --hostname github.intuit.com
-#   Option 2: Generate a Personal Access Token at github.intuit.com/settings/tokens
-#             then: git config --global credential.https://github.intuit.com.helper store
-#             and clone once to cache credentials
+#   - Git authenticated with github.intuit.com (see README)
 
 set -e
 
-PROJECT_NAME=${1:-"design-prototype"}
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_NAME="$(basename "$SCRIPT_DIR")"
 IDS_REPO="https://github.intuit.com/design-systems/ids-web.git"
 IDS_DIR="int-design-system"
 
-echo "🎨 Scaffolding Intuit Design Prototype: $PROJECT_NAME"
+echo "🎨 Setting up: $PROJECT_NAME"
 echo "=================================================="
 
 # -------------------------------------------------------------------
-# Step 1: Create project with Vite + React + TypeScript
+# Step 1: Scaffold Vite + React + TypeScript in current directory
 # -------------------------------------------------------------------
-npm create vite@latest "$PROJECT_NAME" -- --template react-ts
-cd "$PROJECT_NAME"
+echo ""
+echo "📦 Creating React + TypeScript project..."
 
+# Create Vite project in a temp folder, then move contents here
+TEMP_DIR=$(mktemp -d)
+npm create vite@latest "$TEMP_DIR/app" -- --template react-ts 2>/dev/null
+
+# Move Vite files into current directory (skip files we already have)
+cp -n "$TEMP_DIR/app/package.json" ./package.json 2>/dev/null || true
+cp -n "$TEMP_DIR/app/tsconfig.json" ./tsconfig.json 2>/dev/null || true
+cp -n "$TEMP_DIR/app/tsconfig.app.json" ./tsconfig.app.json 2>/dev/null || true
+cp -n "$TEMP_DIR/app/tsconfig.node.json" ./tsconfig.node.json 2>/dev/null || true
+cp -n "$TEMP_DIR/app/vite.config.ts" ./vite.config.ts 2>/dev/null || true
+cp -n "$TEMP_DIR/app/eslint.config.js" ./eslint.config.js 2>/dev/null || true
+cp -n "$TEMP_DIR/app/index.html" ./index.html 2>/dev/null || true
+cp -rn "$TEMP_DIR/app/src/" ./src/ 2>/dev/null || true
+cp -rn "$TEMP_DIR/app/public/" ./public/ 2>/dev/null || true
+
+# Copy .gitignore from Vite (merge with ours if needed)
+if [ -f "$TEMP_DIR/app/.gitignore" ]; then
+  cp "$TEMP_DIR/app/.gitignore" ./.gitignore
+fi
+
+rm -rf "$TEMP_DIR"
+
+# -------------------------------------------------------------------
+# Step 2: Create project structure
+# -------------------------------------------------------------------
 echo ""
 echo "📁 Creating project structure..."
 
-# Create directories
 mkdir -p docs
 mkdir -p src/{components,pages,layouts,hooks,mocks/data,lib,styles}
 mkdir -p public
-
-# -------------------------------------------------------------------
-# Step 2: Copy template files
-# -------------------------------------------------------------------
-echo "📄 Installing CLAUDE.md and agents.md..."
-cp "$SCRIPT_DIR/CLAUDE.md" ./CLAUDE.md
-cp "$SCRIPT_DIR/agents.md" ./agents.md
-cp "$SCRIPT_DIR/docs/PRD.md" ./docs/PRD.md
-cp "$SCRIPT_DIR/docs/design.md" ./docs/design.md
 
 # -------------------------------------------------------------------
 # Step 3: Clone IDS Design System (for component reference)
@@ -55,7 +64,6 @@ echo ""
 
 if git clone --depth 1 "$IDS_REPO" "$IDS_DIR" 2>/dev/null; then
   echo "✅ IDS cloned to $IDS_DIR/"
-  # Add IDS clone to gitignore so it's not committed to the prototype repo
   echo "" >> .gitignore
   echo "# IDS design system clone (local reference only, do not commit)" >> .gitignore
   echo "int-design-system/" >> .gitignore
@@ -63,7 +71,7 @@ else
   echo ""
   echo "⚠️  Could not clone IDS. This is likely an authentication issue."
   echo ""
-  echo "   To fix, run ONE of these and then re-run the scaffold:"
+  echo "   To fix, run ONE of these and then clone manually:"
   echo ""
   echo "   Option 1 (recommended):"
   echo "     gh auth login --hostname github.intuit.com"
@@ -72,10 +80,6 @@ else
   echo "     1. Go to github.intuit.com/settings/tokens"
   echo "     2. Generate a token with 'repo' scope"
   echo "     3. Run: git clone https://YOUR_TOKEN@github.intuit.com/design-systems/ids-web.git int-design-system"
-  echo ""
-  echo "   You can also clone IDS manually later:"
-  echo "     cd $PROJECT_NAME"
-  echo "     git clone --depth 1 $IDS_REPO $IDS_DIR"
   echo ""
   echo "   Continuing without IDS clone — the prototype will still work,"
   echo "   but Claude Code won't be able to read component docs locally."
@@ -158,7 +162,7 @@ function App() {
 export default App;
 APPEOF
 
-# .gitignore additions
+# Add extra gitignore entries
 cat >> .gitignore << 'GITEOF'
 
 # Design artifacts (keep in repo)
@@ -173,6 +177,9 @@ cat >> .gitignore << 'GITEOF'
 # OS
 .DS_Store
 Thumbs.db
+
+# Template files (not needed after scaffold)
+scaffold.sh
 GITEOF
 
 # -------------------------------------------------------------------
@@ -186,13 +193,13 @@ npm install
 # Done
 # -------------------------------------------------------------------
 echo ""
-echo "✅ Done! Your prototype is ready."
+echo "✅ Done! $PROJECT_NAME is ready."
 echo ""
 echo "Next steps:"
-echo "  cd $PROJECT_NAME"
-echo "  1. Fill in docs/PRD.md with your product requirements"
-echo "  2. Run: npm run dev"
-echo "  3. Open Claude Code and start building from the PRD"
+echo "  1. Open in VS Code: code ."
+echo "  2. Fill in docs/PRD.md with your product requirements"
+echo "  3. Run: npm run dev"
+echo "  4. Open Claude Code and start building from the PRD"
 echo ""
 echo "Useful commands:"
 echo "  npm run dev        → Start dev server"
