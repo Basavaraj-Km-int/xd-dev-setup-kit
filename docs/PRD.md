@@ -1,6 +1,8 @@
 # Product Requirements Document (PRD)
 
-> Fill in each section below. Claude Code and other agents will read this file to understand what to build.
+> **Option A**: Fill in the sections below directly.
+> **Option B**: Already have a PRD in Google Docs or Confluence? Download it as markdown (Google Docs: File → Download → Markdown) and paste the content below. Delete the template sections you don't need — Claude Code will work with whatever structure you provide.
+> The sections below are a guide, not a requirement. What matters is that the user problem, solution, and success criteria are clear.
 
 ---
 
