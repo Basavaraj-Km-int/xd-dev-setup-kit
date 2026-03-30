@@ -288,18 +288,21 @@ Always check the Storybook first: `get-documentation("components-checkbox")`
 
 ## IDS Storybook (Component Reference)
 
-### Option A: Storybook MCP Proxy (Recommended — no IDS clone needed)
+### Option A: Platform Context MCP (Easiest — hosted, no setup)
 
-The MCP proxy fetches IDS component docs directly from the hosted CDN. No 450MB repo clone, no build step.
+The IDS team provides a hosted MCP server with all component docs. No local setup needed.
 
-**One-time setup:**
+**One-time setup** — add to Claude Code:
 
 ```bash
-# Clone the proxy (tiny — 13 packages, ~5MB)
-git clone https://github.com/Basavaraj-Km-int/ids-storybook-mcp-proxy.git
-cd ids-storybook-mcp-proxy
-npm install
+claude mcp add platform-context -- npx mcp-remote@next https://mcp-platform.netlify.app/mcp
 ```
+
+Ask Claude Code: "How do I use the trowser component?" or "Show me how to implement the space tokens"
+
+### Option B: Storybook MCP Proxy (Created by scaffold)
+
+The scaffold (`./scaffold.sh`) automatically creates an `ids-storybook-mcp-proxy/` folder in your project. It fetches component docs from the hosted IDS CDN.
 
 **Start the proxy (before each session):**
 
@@ -379,7 +382,8 @@ These MCP servers enhance Claude Code's capabilities:
 
 | MCP Server | Purpose | Setup Command |
 |---|---|---|
-| **IDS Storybook MCP Proxy** | Look up IDS component docs (no clone needed) | `cd ids-storybook-mcp-proxy && node server.js` then `claude mcp add ids-storybook --transport http http://localhost:6007/mcp` |
+| **Platform Context MCP** | Look up IDS component docs (hosted, no setup) | `claude mcp add platform-context -- npx mcp-remote@next https://mcp-platform.netlify.app/mcp` |
+| **Storybook MCP Proxy** | Component docs from CDN (created by scaffold) | `cd ids-storybook-mcp-proxy && node server.js` then `claude mcp add ids-storybook --transport http http://localhost:6007/mcp` |
 | **Figma MCP** | Read Figma designs | `claude mcp add --transport http figma-remote-mcp https://mcp.figma.com/mcp` |
 | **Agentation** | Visual feedback in browser | `claude mcp add agentation -- npx agentation-mcp server` |
 | **Chrome DevTools** | Browser automation & screenshots | (Plugin — install via Claude Code) |

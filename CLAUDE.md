@@ -52,11 +52,15 @@ project-root/
 
 ### Learn Before You Use
 
-**Primary reference — IDS Storybook MCP Proxy (programmatic, preferred):**
+**Primary reference — Platform Context MCP (hosted, no setup):**
 
-The IDS Storybook MCP proxy fetches component docs directly from the hosted IDS CDN — no local clone needed.
+The IDS team provides a hosted MCP server with all component documentation:
+- Setup: `claude mcp add platform-context -- npx mcp-remote@next https://mcp-platform.netlify.app/mcp`
+- Ask: "How do I use the trowser component?" or "Show me how to implement space tokens"
 
-Setup (one-time): `cd ids-storybook-mcp-proxy && npm install && node server.js`
+**Secondary reference — Storybook MCP Proxy (created by scaffold):**
+
+The scaffold creates `ids-storybook-mcp-proxy/` in your project. Start it: `cd ids-storybook-mcp-proxy && node server.js`
 Then: `claude mcp add ids-storybook --transport http http://localhost:6007/mcp`
 
 MCP tools available:
