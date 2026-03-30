@@ -137,7 +137,7 @@ gh auth login --hostname github.intuit.com
 ### Step 1: Clone the template
 
 ```bash
-git clone https://github.intuit.com/YOUR_ORG/xd-dev-setup-kit.git my-prototype
+git clone https://github.com/Basavaraj-Km-int/xd-dev-setup-kit.git my-prototype
 cd my-prototype
 ```
 
