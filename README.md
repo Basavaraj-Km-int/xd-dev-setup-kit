@@ -213,36 +213,58 @@ Always check the Storybook first: `get-documentation("components-checkbox")`
 
 ## IDS Storybook (Component Reference)
 
-### Option A: Storybook MCP (Best — programmatic access for Claude Code)
+### Option A: Storybook MCP Proxy (Recommended — no IDS clone needed)
 
-If you have the IDS repo cloned:
+The MCP proxy fetches IDS component docs directly from the hosted CDN. No 450MB repo clone, no build step.
+
+**One-time setup:**
 
 ```bash
-# Build components (required once)
-cd ids-web-full && yarn build
-
-# Start Storybook
-yarn dev
-
-# Add MCP to Claude Code (from project root)
-claude mcp add storybook-mcp --transport http http://localhost:6006/mcp --scope project
+# Clone the proxy (tiny — 13 packages, ~5MB)
+git clone https://github.com/Basavaraj-Km-int/ids-storybook-mcp-proxy.git
+cd ids-storybook-mcp-proxy
+npm install
 ```
 
-Then Claude Code can look up any component:
-- `list-all-documentation` — see all 68 components
-- `get-documentation("components-button")` — get exact props and code examples
+**Start the proxy (before each session):**
 
-### Option B: Hosted Storybook (No setup needed)
+```bash
+cd ids-storybook-mcp-proxy
+node server.js
+```
 
-Open in browser:
+You'll see:
+```
+IDS Storybook MCP Proxy
+MCP server ready at: http://localhost:6007/mcp
+```
+
+**Connect Claude Code (one-time per project):**
+
+```bash
+claude mcp add ids-storybook --transport http http://localhost:6007/mcp
+```
+
+Claude Code can now look up any IDS component:
+- `list-all-documentation` — see all 68+ components
+- `get-documentation("components-button")` — get exact props, variants, code examples
+- `get-documentation-for-story` — get specific story variant code
+
+### Option B: Hosted Storybook (Browse in browser)
+
+Open in browser — no setup needed, but only for human reference (Claude Code can't query it programmatically):
 ```
 https://uxfabric.intuitcdn.net/internal/design-systems/ids-web/main/latest/index.html
 ```
 
-### Option C: IDS Web Components Figma
+### Option C: Local IDS Clone (Fallback — heavy, 450MB+)
 
-```
-https://www.figma.com/design/VO8rsMYDqsDY44J9yEVyES9Y/IDS---Web-components
+Only if you need the full IDS source code:
+
+```bash
+git clone --depth 1 https://github.intuit.com/design-systems/ids-web.git ids-web-full
+cd ids-web-full && yarn build && yarn dev
+claude mcp add storybook-mcp --transport http http://localhost:6006/mcp --scope project
 ```
 
 ---
@@ -282,7 +304,7 @@ These MCP servers enhance Claude Code's capabilities:
 
 | MCP Server | Purpose | Setup Command |
 |---|---|---|
-| **Storybook MCP** | Look up IDS component docs | `claude mcp add storybook-mcp --transport http http://localhost:6006/mcp --scope project` |
+| **IDS Storybook MCP Proxy** | Look up IDS component docs (no clone needed) | `cd ids-storybook-mcp-proxy && node server.js` then `claude mcp add ids-storybook --transport http http://localhost:6007/mcp` |
 | **Figma MCP** | Read Figma designs | `claude mcp add --transport http figma-remote-mcp https://mcp.figma.com/mcp` |
 | **Agentation** | Visual feedback in browser | `claude mcp add agentation -- npx agentation-mcp server` |
 | **Chrome DevTools** | Browser automation & screenshots | (Plugin — install via Claude Code) |

@@ -303,27 +303,83 @@ GITEOF
 echo "  Done."
 
 # -------------------------------------------------------------------
-# Step 7: Clone IDS repo (optional, for Storybook MCP)
+# Step 7: Set up IDS Storybook MCP Proxy (for component reference)
 # -------------------------------------------------------------------
 echo ""
-echo "Step 7/7: Cloning IDS Design System repo (for component reference)..."
-echo "  This requires authentication with github.intuit.com"
-echo ""
+echo "Step 7/7: Setting up IDS Storybook MCP proxy..."
 
-if git clone --depth 1 "$IDS_REPO" "$IDS_DIR" 2>/dev/null; then
-  echo "  IDS cloned to $IDS_DIR/"
+MCP_PROXY_DIR="ids-storybook-mcp-proxy"
+
+if [ ! -d "$MCP_PROXY_DIR" ]; then
+  mkdir -p "$MCP_PROXY_DIR"
+
+  cat > "$MCP_PROXY_DIR/package.json" << 'MCPPKGEOF'
+{
+  "name": "ids-storybook-mcp-proxy",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": { "start": "node server.js" },
+  "dependencies": { "@storybook/mcp": "latest" }
+}
+MCPPKGEOF
+
+  cat > "$MCP_PROXY_DIR/server.js" << 'MCPEOF'
+import { createStorybookMcpHandler } from '@storybook/mcp';
+import { createServer } from 'node:http';
+
+const BASE = 'https://uxfabric.intuitcdn.net/internal/design-systems/ids-web/main/latest';
+const PORT = 6007;
+
+const handler = await createStorybookMcpHandler({
+  manifestProvider: async (_req, path) => {
+    const url = `${BASE}/${path}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Failed: ${url} ${res.status}`);
+    return res.text();
+  },
+});
+
+const server = createServer(async (req, res) => {
+  const url = new URL(req.url, `http://localhost:${PORT}`);
+  if (url.pathname === '/health') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ status: 'ok', source: BASE }));
+    return;
+  }
+  if (url.pathname === '/mcp') {
+    try {
+      const headers = new Headers();
+      for (const [k, v] of Object.entries(req.headers)) { if (v) headers.set(k, Array.isArray(v) ? v[0] : v); }
+      const body = await new Promise(r => { const c = []; req.on('data', d => c.push(d)); req.on('end', () => r(Buffer.concat(c))); });
+      const wr = new Request(`http://localhost:${PORT}${req.url}`, { method: req.method, headers, body: req.method !== 'GET' && req.method !== 'HEAD' ? body : undefined });
+      const resp = await handler(wr);
+      res.writeHead(resp.status, Object.fromEntries(resp.headers.entries()));
+      res.end(await resp.text());
+    } catch (e) { res.writeHead(500); res.end(JSON.stringify({ error: e.message })); }
+    return;
+  }
+  res.writeHead(404);
+  res.end('Use /mcp or /health');
+});
+
+server.listen(PORT, () => {
+  console.log(`IDS Storybook MCP ready at http://localhost:${PORT}/mcp`);
+  console.log('Connect: claude mcp add ids-storybook --transport http http://localhost:' + PORT + '/mcp');
+});
+MCPEOF
+
+  (cd "$MCP_PROXY_DIR" && npm install 2>/dev/null)
+  echo "  MCP proxy installed to $MCP_PROXY_DIR/"
 else
-  echo ""
-  echo "  Could not clone IDS. This is likely an authentication issue."
-  echo ""
-  echo "  To fix, run ONE of these:"
-  echo ""
-  echo "    Option 1: gh auth login --hostname github.intuit.com"
-  echo "    Option 2: git clone https://YOUR_TOKEN@github.intuit.com/design-systems/ids-web.git $IDS_DIR"
-  echo ""
-  echo "  Continuing without IDS clone. The prototype will still work."
-  echo ""
+  echo "  MCP proxy already exists at $MCP_PROXY_DIR/"
 fi
+
+# Add to gitignore
+echo "" >> .gitignore
+echo "# IDS Storybook MCP proxy" >> .gitignore
+echo "ids-storybook-mcp-proxy/" >> .gitignore
+
+echo "  Done."
 
 # -------------------------------------------------------------------
 # Done
@@ -340,8 +396,10 @@ echo "  npm run preview         Preview production build (fast navigation)"
 echo ""
 echo "Next steps:"
 echo "  1. Fill in docs/PRD.md with your product requirements"
-echo "  2. Run: npm run dev"
-echo "  3. Open Claude Code and say: 'Read the PRD and build the prototype'"
+echo "  2. Start IDS MCP: cd ids-storybook-mcp-proxy && node server.js"
+echo "  3. Connect MCP: claude mcp add ids-storybook --transport http http://localhost:6007/mcp"
+echo "  4. Run: npm run dev"
+echo "  5. Open Claude Code and say: 'Read the PRD and build the prototype'"
 echo ""
 echo "IDS components available:"
 echo "  import Button from '@ids-ts/button';"
@@ -351,12 +409,6 @@ echo ""
 echo "To add more IDS components:"
 echo "  npm install @ids-ts/checkbox @ids-ts/radio @ids-ts/switch"
 echo ""
-if [ -d "$IDS_DIR" ]; then
-  echo "IDS Storybook (for component reference):"
-  echo "  cd $IDS_DIR && yarn build && yarn dev"
-  echo "  Then add MCP: claude mcp add storybook-mcp --transport http http://localhost:6006/mcp --scope project"
-  echo ""
-fi
-echo "IDS Storybook (hosted — no setup needed):"
+echo "IDS Storybook (browse in browser):"
 echo "  https://uxfabric.intuitcdn.net/internal/design-systems/ids-web/main/latest/index.html"
 echo ""

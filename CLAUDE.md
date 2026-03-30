@@ -46,42 +46,33 @@ project-root/
 
 ## Intuit Design System (IDS)
 
-**Local clone**: `ids-web-full/` (cloned during scaffold)
 **Registry**: `https://registry.npmjs.intuit.com/`
 **React version**: 18.2.0 (required — IDS peer dependency)
+**Storybook**: `https://uxfabric.intuitcdn.net/internal/design-systems/ids-web/main/latest/index.html`
 
 ### Learn Before You Use
 
-**Primary reference — Storybook MCP (programmatic, preferred):**
+**Primary reference — IDS Storybook MCP Proxy (programmatic, preferred):**
 
-If the Storybook MCP server is connected (`http://localhost:6006/mcp`), use these tools:
-1. `list-all-documentation` — discover all available IDS components
-2. `get-documentation("components-button")` — get props, stories, code examples for any component
+The IDS Storybook MCP proxy fetches component docs directly from the hosted IDS CDN — no local clone needed.
+
+Setup (one-time): `cd ids-storybook-mcp-proxy && npm install && node server.js`
+Then: `claude mcp add ids-storybook --transport http http://localhost:6007/mcp`
+
+MCP tools available:
+1. `list-all-documentation` — discover all 68+ IDS components
+2. `get-documentation("components-button")` — get props, stories, code examples
 3. `get-documentation-for-story` — get a specific variant's code
 
-To set up: `cd ids-web-full && yarn build && yarn dev` then `claude mcp add storybook-mcp --transport http http://localhost:6006/mcp --scope project`
+**Always look up a component via MCP before using it.** Never guess prop names or values.
 
-**Secondary reference — IDS Storybook (live hosted):**
+**Secondary reference — IDS Storybook (browse in browser):**
 `https://uxfabric.intuitcdn.net/internal/design-systems/ids-web/main/latest/index.html`
 
-Before using ANY IDS component, open the Storybook URL in Chrome DevTools MCP and navigate to the component's docs page to check:
-- Available props and their values
-- Visual examples of each variant (purpose, priority, size)
-- Do's and don'ts
-- Accessibility requirements
-
-**To look up a component via Chrome DevTools MCP:**
-1. `navigate_page` to `https://uxfabric.intuitcdn.net/internal/design-systems/ids-web/main/latest/index.html?path=/docs/components-{component}--docs`
-2. `take_screenshot` to see the rendered docs
-3. `take_snapshot` to read prop tables
-
-**Tertiary reference — local IDS clone (for source code):**
-
+**Tertiary reference — local IDS clone (if available):**
 1. `ids-web-full/components/{Component}/README.md`
 2. `ids-web-full/components/{Component}/src/types.ts`
 3. `ids-web-full/components/{Component}/src/stories/*.stories.tsx`
-4. `ids-web-full/components/{Component}/src/stories/Docs.mdx`
-5. `ids-web-full/components/{Component}/src/*.snippet.tsx`
 
 ### IDS Design Tokens (CDN)
 
