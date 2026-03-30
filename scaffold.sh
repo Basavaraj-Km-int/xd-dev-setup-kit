@@ -11,7 +11,8 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_NAME="$(basename "$SCRIPT_DIR")"
-IDS_TOKEN_CDN="https://uxfabric.intuitcdn.net/components/design-systems/tokens/ddms3.0/prod/24.5.0/css/intuit.css"
+IDS_TOKEN_BASE="https://uxfabric.intuitcdn.net/components/design-systems/tokens/ddms3.0/prod/24.5.0/css"
+IDS_BRANDS="intuit turbotax quickbooks mailchimp creditkarma mint"
 
 echo "=================================================="
 echo "  XD Dev Setup Kit — Scaffolding: $PROJECT_NAME"
@@ -86,13 +87,20 @@ npm install -D postcss-mixins@9.0.4 postcss-nested@6.0.1 postcss-simple-vars@7.0
 echo "  Done."
 
 # -------------------------------------------------------------------
-# Step 5: Download IDS design tokens from CDN
+# Step 5: Download IDS design tokens from CDN (all brands)
 # -------------------------------------------------------------------
 echo ""
-echo "Step 5/7: Downloading IDS design tokens..."
+echo "Step 5/7: Downloading IDS design tokens for all brands..."
 
-curl -s "$IDS_TOKEN_CDN" > src/styles/ids-tokens.css
-echo "  Downloaded $(wc -l < src/styles/ids-tokens.css | tr -d ' ') lines of tokens"
+mkdir -p src/styles/tokens
+for brand in $IDS_BRANDS; do
+  curl -s "$IDS_TOKEN_BASE/$brand.css" > "src/styles/tokens/$brand.css"
+  echo "  Downloaded $brand.css ($(wc -l < "src/styles/tokens/$brand.css" | tr -d ' ') lines)"
+done
+
+# Default: use intuit tokens as ids-tokens.css
+cp src/styles/tokens/intuit.css src/styles/ids-tokens.css
+echo "  Default theme: intuit (change in src/main.tsx to use another brand)"
 
 # -------------------------------------------------------------------
 # Step 6: Create configuration files
@@ -256,7 +264,16 @@ APPEOF
 cat > src/main.tsx << 'MAINEOF'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+
+// IDS Design Tokens — default: Intuit theme
+// To switch brand, change the import AND the data-theme in App.tsx:
+//   import './styles/tokens/turbotax.css'    → data-theme="turbotax"
+//   import './styles/tokens/quickbooks.css'  → data-theme="quickbooks"
+//   import './styles/tokens/mailchimp.css'   → data-theme="mailchimp"
+//   import './styles/tokens/creditkarma.css' → data-theme="creditkarma"
+//   import './styles/tokens/mint.css'        → data-theme="mint"
 import './styles/ids-tokens.css'
+
 import './styles/ids-overrides.css'
 import './styles/ids-imports.css'
 import './index.css'

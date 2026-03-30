@@ -119,9 +119,31 @@ import { H1, H2, B1, B2, B3, Demi, Bold } from '@ids-ts/typography';
 ### CSS & Theming
 
 - CSS Modules (`.module.css`) with PostCSS
-- Theming via `@design-systems/theme` -- components accept `theme` and `colorScheme`
 - Token variables: `--color-action-standard`, `--font-family-component`, `--radius-action`
 - Never hardcode values. Never override IDS custom properties directly.
+
+### Multi-Brand Theming
+
+IDS supports 6 Intuit brands. All brand tokens are downloaded during scaffold to `src/styles/tokens/`.
+
+| Brand | Token file | `data-theme` value |
+|-------|-----------|-------------------|
+| **Intuit** (default) | `tokens/intuit.css` | `intuit` |
+| **TurboTax** | `tokens/turbotax.css` | `turbotax` |
+| **QuickBooks** | `tokens/quickbooks.css` | `quickbooks` |
+| **Mailchimp** | `tokens/mailchimp.css` | `mailchimp` |
+| **Credit Karma** | `tokens/creditkarma.css` | `creditkarma` |
+| **Mint** | `tokens/mint.css` | `mint` |
+
+All brands support `light` and `dark` color schemes.
+
+To switch brand:
+1. Change the token import in `src/main.tsx`: `import './styles/tokens/turbotax.css'`
+2. Change the wrapper in `App.tsx`: `<div data-theme="turbotax" data-colorscheme="light">`
+
+Same IDS components, different visual identity — colors, typography, and spacing all change automatically.
+
+CDN base: `https://uxfabric.intuitcdn.net/components/design-systems/tokens/ddms3.0/prod/24.5.0/css/`
 
 ### Breakpoints
 

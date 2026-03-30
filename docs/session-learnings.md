@@ -216,7 +216,20 @@ SSH keys weren't configured for either. The scaffold's `git clone` for IDS faile
 6. Production build instructions for demos
 
 ### Nice-to-Have
-1. Storybook MCP auto-setup in scaffold
+1. Storybook MCP auto-setup in scaffold ✅ (done — MCP proxy in scaffold v2)
 2. Agentation + React Grab pre-configured
 3. MSW (Mock Service Worker) for API mocking
 4. Dark mode toggle using `data-colorscheme="dark"` (tokens already support it)
+
+---
+
+## 11. Multi-Brand Theming Discovery
+
+All Intuit brand tokens are available on the CDN:
+- `intuit.css`, `turbotax.css`, `quickbooks.css`, `mailchimp.css`, `creditkarma.css`, `mint.css`
+- CDN base: `https://uxfabric.intuitcdn.net/components/design-systems/tokens/ddms3.0/prod/24.5.0/css/`
+- Each supports `light` and `dark` color schemes
+- Switch by changing token import in `main.tsx` and `data-theme` in `App.tsx`
+- Same IDS components work across all brands — only token values change
+- The `@design-systems/storybook-theme-addon` provides brand switching in local Storybook but is NOT on the hosted Storybook
+- Brand theme source: `github.intuit.com/design-systems/theme`

@@ -130,7 +130,7 @@ Tell Claude: **"Read the PRD and create the design document, then build the prot
 | **Bundler** | Vite | 8.x |
 | **Language** | TypeScript | 5.9.x |
 | **Design System** | IDS (`@ids-ts/*`) | 5.153.x |
-| **Tokens** | IDS CDN (Intuit theme, light/dark) | 24.5.0 |
+| **Tokens** | IDS CDN (6 brands: Intuit, TurboTax, QuickBooks, Mailchimp, Credit Karma, Mint) | 24.5.0 |
 | **CSS** | CSS Modules + PostCSS | — |
 | **Routing** | React Router | 7.x |
 | **PostCSS** | postcss-mixins, postcss-nested, postcss-simple-vars | Matches IDS |
@@ -154,7 +154,8 @@ my-prototype/
 │   ├── mocks/data/           # Mock data fixtures
 │   ├── lib/                  # Types & utilities
 │   └── styles/
-│       ├── ids-tokens.css    # Real IDS tokens (from CDN)
+│       ├── ids-tokens.css    # Active brand tokens (default: Intuit)
+│       ├── tokens/           # All brand tokens (intuit, turbotax, quickbooks, mailchimp, creditkarma, mint)
 │       ├── ids-overrides.css # Admin UI adjustments
 │       ├── ids-imports.css   # IDS component CSS
 │       └── global.css        # Base styles
@@ -336,6 +337,62 @@ The CDN tokens are designed for full Intuit product pages. For admin/dashboard p
 - **Softer dividers**: `#F0F2F4` instead of `#BABEC5`
 
 Edit this file to adjust the visual feel for your prototype.
+
+---
+
+## Multi-Brand Theming
+
+IDS supports all Intuit brands. The scaffold downloads tokens for all 6 brands to `src/styles/tokens/`:
+
+| Brand | File | `data-theme` | Use for |
+|-------|------|-------------|---------|
+| **Intuit** (default) | `tokens/intuit.css` | `intuit` | Intuit corporate, cross-product |
+| **TurboTax** | `tokens/turbotax.css` | `turbotax` | TurboTax product UIs |
+| **QuickBooks** | `tokens/quickbooks.css` | `quickbooks` | QuickBooks product UIs |
+| **Mailchimp** | `tokens/mailchimp.css` | `mailchimp` | Mailchimp product UIs |
+| **Credit Karma** | `tokens/creditkarma.css` | `creditkarma` | Credit Karma product UIs |
+| **Mint** | `tokens/mint.css` | `mint` | Mint product UIs |
+
+All brands support `light` and `dark` color schemes.
+
+### How to Switch Brand
+
+**Step 1**: Change the token import in `src/main.tsx`:
+
+```tsx
+// Default: Intuit
+import './styles/ids-tokens.css'
+
+// To use TurboTax instead:
+import './styles/tokens/turbotax.css'
+```
+
+**Step 2**: Change the theme wrapper in `src/App.tsx`:
+
+```tsx
+// Default: Intuit
+<div data-theme="intuit" data-colorscheme="light">
+
+// TurboTax:
+<div data-theme="turbotax" data-colorscheme="light">
+
+// QuickBooks dark mode:
+<div data-theme="quickbooks" data-colorscheme="dark">
+```
+
+Same IDS components, different visual identity — colors, typography, and spacing all change automatically based on the brand tokens.
+
+### Token CDN
+
+All brand tokens are hosted at:
+```
+https://uxfabric.intuitcdn.net/components/design-systems/tokens/ddms3.0/prod/24.5.0/css/{brand}.css
+```
+
+To re-download the latest tokens:
+```bash
+curl -s "https://uxfabric.intuitcdn.net/components/design-systems/tokens/ddms3.0/prod/24.5.0/css/turbotax.css" > src/styles/tokens/turbotax.css
+```
 
 ---
 
