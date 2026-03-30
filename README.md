@@ -107,40 +107,92 @@ gh auth login --hostname github.intuit.com
 
 ---
 
-## Quick Start (Every New Project)
+## How It Works (The Full Flow)
 
-### 1. Clone this template
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│  Step 1         Step 2          Step 3           Step 4             │
+│  Clone       →  Scaffold     →  Write PRD     →  Open Claude Code  │
+│  template       (sets up        (your product     (AI reads PRD,    │
+│  repo           everything)     requirements)     generates design, │
+│                                                   builds prototype) │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+| Step | Who does it | What happens |
+|------|------------|-------------|
+| 1. Clone template | **You** | Downloads the template files (CLAUDE.md, scaffold.sh, empty PRD, empty design.md) |
+| 2. Run scaffold | **You** (one command) | Installs React, IDS components, downloads brand tokens, creates folder structure, sets up MCP proxy |
+| 3. Write PRD | **You** | Fill in `docs/PRD.md` with your product requirements (or paste from Google Docs) |
+| 4. Open Claude Code | **You** | Paste one prompt — Claude Code takes over from here |
+| 5. Generate design.md | **Claude Code** | Reads your PRD → generates problem statement, user flows, user stories in `docs/design.md` |
+| 6. Review design | **You** | Check the generated design doc — approve, adjust, or add missing flows |
+| 7. Build prototype | **Claude Code** | Builds the prototype screen-by-screen using IDS components |
+| 8. Review & iterate | **You + Claude Code** | Review in browser, give feedback, Claude Code makes changes |
+
+---
+
+## Quick Start
+
+### Step 1: Clone the template
 
 ```bash
 git clone https://github.intuit.com/YOUR_ORG/xd-dev-setup-kit.git my-prototype
 cd my-prototype
 ```
 
-### 2. Run the scaffold
+> Replace `my-prototype` with your project name (e.g., `payroll-onboarding`, `expense-tracker-redesign`). Use lowercase with dashes, no spaces.
+
+### Step 2: Run the scaffold
 
 ```bash
 chmod +x scaffold.sh
 ./scaffold.sh
 ```
 
-This takes ~2 minutes. It installs React, IDS components, downloads tokens, and sets up the Storybook MCP proxy.
+This takes ~2 minutes. The script:
+- Creates a React + TypeScript project with Vite
+- Installs IDS components (Button, Badge, Typography, Loader)
+- Downloads design tokens for all 6 Intuit brands
+- Sets up PostCSS to match the IDS build pipeline
+- Creates the Storybook MCP proxy for component lookup
+- Writes starter files with accessibility baked in
 
-### 3. Write your PRD
+**After this step, your project is fully set up.** You don't need to run any more install commands.
+
+### Step 3: Write your PRD
 
 Open `docs/PRD.md` and fill in your product requirements.
 
-### 4. Start building
+- **Option A**: Fill in the template sections directly
+- **Option B**: Paste from Google Docs (File > Download > Markdown). Then run `./clean-prd.sh` to extract embedded images.
 
-```bash
-npm run dev
-```
+> **This is the only file YOU need to write.** Everything else is generated or pre-configured.
 
-Then open Claude Code in the project directory:
+### Step 4: Open Claude Code and start
+
+Open Claude Code in VS Code (`Cmd + Shift + P` → "Claude Code: Open"), or in Terminal:
+
 ```bash
 claude
 ```
 
-Tell Claude: **"Read the PRD and create the design document, then build the prototype"**
+Then paste this prompt:
+
+> Read docs/PRD.md and create the design document in docs/design.md with customer problem statement, hypothesis, LOFAs, user flows, and user stories. Show me the design doc for review before writing any code.
+
+**Claude Code will:**
+1. Read your PRD
+2. Generate `docs/design.md` — problem statement, hypothesis, user flows, user stories with acceptance criteria
+3. **Show you the design doc and wait for your approval**
+4. After you approve, build the prototype screen-by-screen using IDS components
+5. Start the dev server so you can review in your browser
+
+### Step 5: Review, iterate, share
+
+- Review the prototype in your browser (http://localhost:5173)
+- Tell Claude Code what to change in plain language
+- When ready, capture to Figma: "Capture the UI in a new Figma file"
 
 ---
 
