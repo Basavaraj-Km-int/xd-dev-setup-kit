@@ -197,6 +197,8 @@ Then paste this prompt:
 - Tell Claude Code what to change in plain language
 - When ready, capture to Figma: "Capture the UI in a new Figma file"
 
+> **Need more prompts?** See [docs/claude-code-prompts.md](docs/claude-code-prompts.md) — a complete collection of copy-paste prompts for every step: setup, building, fixing issues, saving, sharing, and more.
+
 ---
 
 ## Tech Stack
@@ -388,8 +390,7 @@ These MCP servers enhance Claude Code's capabilities:
 | **Platform Context MCP** | Look up IDS component docs (hosted, no setup) | `claude mcp add platform-context -- npx mcp-remote@next https://mcp-platform.netlify.app/mcp` |
 | **Storybook MCP Proxy** | Component docs from CDN (created by scaffold) | `cd ids-storybook-mcp-proxy && node server.js` then `claude mcp add ids-storybook --transport http http://localhost:6007/mcp` |
 | **Figma MCP** | Read Figma designs | `claude mcp add --transport http figma-remote-mcp https://mcp.figma.com/mcp` |
-| **Agentation** | Visual feedback in browser | `claude mcp add agentation -- npx agentation-mcp server` |
-| **Chrome DevTools** | Browser automation & screenshots | (Plugin — install via Claude Code) |
+
 
 ---
 
@@ -481,7 +482,7 @@ curl -s "https://uxfabric.intuitcdn.net/components/design-systems/tokens/ddms3.0
 
 | Team | Contact |
 |------|---------|
-| GTM Tech XD Team | Basavaraj K M, Vidyashree Todakar |
+| GTM Tech XD Team | Basavaraj K M
 | Slack | #xd-dev-setup-kit |
 
 ### Changelog
