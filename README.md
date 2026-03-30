@@ -13,7 +13,7 @@ AI-powered prototyping environment for Intuit Product Designers. Scaffold a proj
 3. Downloads **real IDS design tokens** from the Intuit CDN
 4. Configures **PostCSS** to match the IDS build pipeline
 5. Sets up **CLAUDE.md** with instructions for AI-assisted prototyping
-6. Clones the **IDS source repo** for component reference
+6. Sets up **Storybook MCP proxy** for AI-powered component lookup (no IDS clone needed)
 7. Provides **admin UI overrides** (softer shadows/borders for dashboards)
 
 Your prototype uses the same components and tokens that developers use in production.
@@ -69,7 +69,7 @@ If not installed, follow: [claude.ai/code](https://claude.ai/code)
 ```bash
 gh auth login --hostname github.intuit.com
 ```
-Follow the prompts. This gives the scaffold access to clone the IDS repo.
+Follow the prompts.
 
 ### Step 3: Configure npm for Intuit packages
 
@@ -101,7 +101,7 @@ chmod +x scaffold.sh
 ./scaffold.sh
 ```
 
-This takes ~2 minutes. It installs React, IDS components, downloads tokens, and clones the IDS repo.
+This takes ~2 minutes. It installs React, IDS components, downloads tokens, and sets up the Storybook MCP proxy.
 
 ### 3. Write your PRD
 
@@ -158,7 +158,7 @@ my-prototype/
 │       ├── ids-overrides.css # Admin UI adjustments
 │       ├── ids-imports.css   # IDS component CSS
 │       └── global.css        # Base styles
-├── ids-web-full/             # IDS repo (for Storybook MCP)
+├── ids-storybook-mcp-proxy/  # Storybook MCP proxy (5MB, no IDS clone needed)
 ├── vite.config.ts            # Vite with IDS optimizations
 ├── postcss.config.js         # Matches IDS build pipeline
 └── package.json

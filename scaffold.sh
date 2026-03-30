@@ -11,8 +11,6 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_NAME="$(basename "$SCRIPT_DIR")"
-IDS_REPO="https://github.intuit.com/design-systems/ids-web.git"
-IDS_DIR="ids-web-full"
 IDS_TOKEN_CDN="https://uxfabric.intuitcdn.net/components/design-systems/tokens/ddms3.0/prod/24.5.0/css/intuit.css"
 
 echo "=================================================="
