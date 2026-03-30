@@ -224,7 +224,7 @@ my-prototype/
 ├── docs/
 │   ├── PRD.md                # Your product requirements
 │   ├── design.md             # Generated design document
-│   └── session-learnings.md  # Build session notes
+│   └── claude-code-prompts.md # Copy-paste prompts for every step
 ├── src/
 │   ├── components/           # Custom components
 │   ├── pages/                # Page views
