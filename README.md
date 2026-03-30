@@ -134,21 +134,24 @@ gh auth login --hostname github.intuit.com
 
 ## Quick Start
 
-### Step 1: Clone the template
+### Step 1: Clone the template and run scaffold
+
+Open Terminal and **copy-paste this entire block** (replace `my-prototype` with your project name):
 
 ```bash
-git clone https://github.com/Basavaraj-Km-int/xd-dev-setup-kit.git my-prototype
-cd my-prototype
+git clone https://github.com/Basavaraj-Km-int/xd-dev-setup-kit.git my-prototype && cd my-prototype && chmod +x scaffold.sh && ./scaffold.sh
 ```
 
-> Replace `my-prototype` with your project name (e.g., `payroll-onboarding`, `expense-tracker-redesign`). Use lowercase with dashes, no spaces.
-
-### Step 2: Run the scaffold
-
+Examples:
 ```bash
-chmod +x scaffold.sh
-./scaffold.sh
+# For a payroll project:
+git clone https://github.com/Basavaraj-Km-int/xd-dev-setup-kit.git payroll-onboarding && cd payroll-onboarding && chmod +x scaffold.sh && ./scaffold.sh
+
+# For an expense tracker:
+git clone https://github.com/Basavaraj-Km-int/xd-dev-setup-kit.git expense-tracker && cd expense-tracker && chmod +x scaffold.sh && ./scaffold.sh
 ```
+
+> Use lowercase with dashes for the name, no spaces. This is the **only Terminal command you need** — it clones, enters the folder, and runs the full setup.
 
 This takes ~2 minutes. The script:
 - Creates a React + TypeScript project with Vite
@@ -160,7 +163,7 @@ This takes ~2 minutes. The script:
 
 **After this step, your project is fully set up.** You don't need to run any more install commands.
 
-### Step 3: Write your PRD
+### Step 2: Write your PRD
 
 Open `docs/PRD.md` and fill in your product requirements.
 
@@ -169,7 +172,7 @@ Open `docs/PRD.md` and fill in your product requirements.
 
 > **This is the only file YOU need to write.** Everything else is generated or pre-configured.
 
-### Step 4: Open Claude Code and start
+### Step 3: Open Claude Code and start
 
 Open Claude Code in VS Code (`Cmd + Shift + P` → "Claude Code: Open"), or in Terminal:
 
@@ -188,7 +191,7 @@ Then paste this prompt:
 4. After you approve, build the prototype screen-by-screen using IDS components
 5. Start the dev server so you can review in your browser
 
-### Step 5: Review, iterate, share
+### Step 4: Review, iterate, share
 
 - Review the prototype in your browser (http://localhost:5173)
 - Tell Claude Code what to change in plain language
