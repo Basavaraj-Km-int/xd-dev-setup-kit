@@ -84,6 +84,9 @@ npm install react-router-dom 2>/dev/null
 # PostCSS plugins (matches IDS build pipeline)
 npm install -D postcss-mixins@9.0.4 postcss-nested@6.0.1 postcss-simple-vars@7.0.1 2>/dev/null
 
+# Mock Service Worker (intercepts API calls with fake responses)
+npm install -D msw 2>/dev/null
+
 echo "  Done."
 
 # -------------------------------------------------------------------
@@ -293,6 +296,40 @@ cat > src/index.css << 'INDEXEOF'
   min-height: 100vh;
 }
 INDEXEOF
+
+# MSW mock API handlers
+cat > src/mocks/handlers.ts << 'MSWEOF'
+import { http, HttpResponse } from 'msw';
+
+// Define mock API handlers here.
+// Components can use fetch('/api/...') and MSW intercepts the calls.
+// Docs: https://mswjs.io/docs/getting-started
+
+export const handlers = [
+  // Example: GET /api/users
+  http.get('/api/users', () => {
+    return HttpResponse.json([
+      { id: '1', name: 'Alice Johnson', email: 'alice@example.com' },
+      { id: '2', name: 'Bob Smith', email: 'bob@example.com' },
+    ]);
+  }),
+
+  // Example: POST /api/users
+  http.post('/api/users', async ({ request }) => {
+    const body = await request.json();
+    return HttpResponse.json({ id: '3', ...body }, { status: 201 });
+  }),
+];
+MSWEOF
+
+cat > src/mocks/browser.ts << 'MSWBEOF'
+import { setupWorker } from 'msw/browser';
+import { handlers } from './handlers';
+
+// Start the MSW service worker for browser-based mocking.
+// Import and call worker.start() in main.tsx to enable.
+export const worker = setupWorker(...handlers);
+MSWBEOF
 
 # Gitignore additions
 cat >> .gitignore << 'GITEOF'
