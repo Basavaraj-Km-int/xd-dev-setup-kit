@@ -22,7 +22,28 @@ Your prototype uses the same components and tokens that developers use in produc
 
 ## Prerequisites (One-Time Setup)
 
-### Step 1: Install the tools
+You only need to do this once. There are two ways:
+
+### Option A: Let Claude Code check everything for you (Recommended)
+
+If you already have Claude Code installed, open Terminal and run:
+
+```bash
+claude
+```
+
+Then paste this prompt:
+
+> Check if my machine is ready for IDS prototyping. Verify: Node.js 18+, Git, GitHub CLI, and that ~/.npmrc has the Intuit npm registry configured. For anything missing, install it for me or tell me exactly what to do.
+
+Claude Code will check each tool and either install what's missing or give you one-click instructions.
+
+> **Don't have Claude Code yet?** Install it first: open Terminal (`Cmd + Space`, type "Terminal", press Enter) and run `npm install -g @anthropic-ai/claude-code`. If that fails with "npm not found", install Node.js first from [nodejs.org](https://nodejs.org/) (click the LTS button).
+
+### Option B: Check manually (if you prefer)
+
+<details>
+<summary>Click to expand manual setup steps</summary>
 
 > **How to open Terminal on Mac**: Press `Cmd + Space`, type "Terminal", press Enter.
 
@@ -35,7 +56,7 @@ If you see a version number (e.g., `v22.x.x`) — you're good. Otherwise:
 ```bash
 brew install node
 ```
-> Don't have Homebrew? Install it first: go to [brew.sh](https://brew.sh/).
+> Don't have Homebrew? Go to [brew.sh](https://brew.sh/) and copy-paste the install command.
 
 **2. Git**
 
@@ -62,26 +83,27 @@ brew install gh
 ```bash
 claude --version
 ```
-If not installed, follow: [claude.ai/code](https://claude.ai/code)
+If not installed: `npm install -g @anthropic-ai/claude-code` or follow [claude.ai/code](https://claude.ai/code)
 
-### Step 2: Authenticate with Intuit GitHub
+**5. Intuit npm registry**
+
+```bash
+cat ~/.npmrc
+```
+You should see `registry=https://registry.npmjs.intuit.com/`. If not:
+```bash
+echo "registry=https://registry.npmjs.intuit.com/" >> ~/.npmrc
+```
+
+**6. Intuit GitHub auth** (only needed if cloning IDS repo directly)
 
 ```bash
 gh auth login --hostname github.intuit.com
 ```
-Follow the prompts.
 
-### Step 3: Configure npm for Intuit packages
+</details>
 
-Check if already configured:
-```bash
-cat ~/.npmrc
-```
-
-You should see `registry=https://registry.npmjs.intuit.com/`. If not, add it:
-```bash
-echo "registry=https://registry.npmjs.intuit.com/" >> ~/.npmrc
-```
+> **Note**: The scaffold script (`./scaffold.sh`) handles everything AFTER these tools are installed — it creates the project, installs IDS packages, downloads tokens, and sets up the MCP proxy. You don't need to do any of that manually.
 
 ---
 
