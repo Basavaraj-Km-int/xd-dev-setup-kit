@@ -86,7 +86,14 @@ claude --version
 ```
 If not installed: `npm install -g @anthropic-ai/claude-code` or follow [claude.ai/code](https://claude.ai/code)
 
-**5. Intuit npm registry**
+**5. Figma plugin for Claude Code** (enables canvas read/write and 7 design skills)
+
+```bash
+claude plugin install figma@claude-plugins-official
+```
+Authenticate when prompted (opens Figma in browser).
+
+**6. Intuit npm registry**
 
 ```bash
 cat ~/.npmrc
@@ -96,7 +103,7 @@ You should see `registry=https://registry.npmjs.intuit.com/`. If not:
 echo "registry=https://registry.npmjs.intuit.com/" >> ~/.npmrc
 ```
 
-**6. Intuit GitHub auth** (only needed if cloning IDS repo directly)
+**7. Intuit GitHub auth** (only needed if cloning IDS repo directly)
 
 ```bash
 gh auth login --hostname github.intuit.com
@@ -446,7 +453,29 @@ These MCP servers enhance Claude Code's capabilities:
 |---|---|---|
 | **Platform Context MCP** | Look up IDS component docs (hosted, no setup) | `claude mcp add platform-context -- npx mcp-remote@next https://mcp-platform.netlify.app/mcp` |
 | **Storybook MCP Proxy** | Component docs from CDN (created by scaffold) | `cd ids-storybook-mcp-proxy && node server.js` then `claude mcp add ids-storybook --transport http http://localhost:6007/mcp` |
-| **Figma MCP** | Read Figma designs | `claude mcp add --transport http figma-remote-mcp https://mcp.figma.com/mcp` |
+| **Figma MCP** | Read/write Figma designs, capture UI to canvas | `claude mcp add --transport http figma-remote-mcp https://mcp.figma.com/mcp` |
+
+### Figma Plugin (One-Time Global Install)
+
+The Figma plugin bundles 7 skills that teach Claude Code how to work with Figma effectively:
+
+```bash
+claude plugin install figma@claude-plugins-official
+```
+
+This installs once globally — works across all projects. Skills included:
+
+| Skill | What it does |
+|---|---|
+| `figma-use` | Foundational skill for all canvas write operations |
+| `figma-generate-design` | Capture live UI from dev server into Figma |
+| `figma-implement-design` | Translate Figma designs into production code |
+| `figma-generate-library` | Build design system libraries in Figma |
+| `figma-create-design-system-rules` | Create governance rule files for code generation |
+| `figma-code-connect-components` | Connect Figma components to `@ids-ts/*` code |
+| `figma-create-new-file` | Create new Figma Design or FigJam files |
+
+After installing, authenticate when prompted (browser OAuth flow). Skills load automatically when Claude Code detects relevant Figma operations — no per-project setup needed.
 
 
 ---
