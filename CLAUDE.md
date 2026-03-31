@@ -320,6 +320,27 @@ The full bidirectional workflow for prototype iteration:
 
 This loop keeps code and design in sync. The Figma file is a living conversation artifact, not a static handoff.
 
+### GTMXD Figma Skills
+
+Custom skills in `Skills/` teach Claude Code how to bind IDS components in Figma:
+
+- **`gtmxd-apply-ids`** — Post-process captured UI: replace raw frames with IDS library instances
+- **`gtmxd-audit-ids`** — Read-only audit for IDS compliance (missing instances, unbound tokens)
+- **`gtmxd-fix-ids-finding`** — Targeted fix for a single audit finding
+
+Install per-project: `cp -r Skills/gtmxd-* .claude/skills/`
+
+### Three Prototyping Workflows
+
+**Workflow A — PRD only, no Figma designs:**
+PRD → Claude Code builds prototype → `generate_figma_design` captures to Figma → `gtmxd-apply-ids` binds IDS components → `gtmxd-audit-ids` verifies → Designer reviews → iterate
+
+**Workflow B — Existing code + Figma, adding features:**
+Designer creates new Figma screens → `get_design_context` reads design → Claude Code implements → `generate_figma_design` captures back → `gtmxd-apply-ids` rebinds → iterate
+
+**Workflow C — PRD + Figma screens, no codebase:**
+`get_design_context` reads Figma → `search_design_system` identifies IDS components → Claude Code builds matching code → `generate_figma_design` captures for comparison → `gtmxd-audit-ids` verifies parity
+
 ---
 
 ## Accessibility (Non-Negotiable)

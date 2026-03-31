@@ -252,6 +252,10 @@ my-prototype/
 ├── .storybook/
 │   ├── main.ts               # Storybook config (framework, addons, stories glob)
 │   └── preview.tsx            # IDS theme wrapper + token imports
+├── Skills/                   # GTMXD Figma skills (IDS component binding)
+│   ├── gtmxd-apply-ids/      # Post-process captured UI → IDS instances
+│   ├── gtmxd-audit-ids/      # IDS compliance audit (read-only)
+│   └── gtmxd-fix-ids-finding/ # Fix individual audit findings
 ├── ids-storybook-mcp-proxy/  # Storybook MCP proxy (5MB, no IDS clone needed)
 ├── vite.config.ts            # Vite with IDS optimizations
 ├── postcss.config.js         # Matches IDS build pipeline
@@ -442,6 +446,28 @@ export const Error: Story = { args: { status: 'error' } };
 ### IDS Theme in Storybook
 
 The `.storybook/preview.tsx` loads IDS tokens and wraps every story in `<div data-theme="intuit" data-colorscheme="light">`. Components render with full IDS visual parity — same as the dev server.
+
+---
+
+## Figma Skills (IDS Design System Binding)
+
+Custom GTMXD skills in `Skills/` teach Claude Code to bind captured UI to IDS library components in Figma:
+
+| Skill | Purpose | Use When |
+|---|---|---|
+| **gtmxd-apply-ids** | Connect captured UI to IDS Figma library components | After `generate_figma_design` captures prototype to Figma |
+| **gtmxd-audit-ids** | Audit design for IDS compliance | Before handoff, design review checkpoints |
+| **gtmxd-fix-ids-finding** | Fix a single IDS compliance finding | After audit identifies a specific issue |
+
+See `Skills/README.md` for installation instructions and detailed documentation.
+
+### Three Prototyping Workflows
+
+| Workflow | Starting Point | Flow |
+|---|---|---|
+| **A: PRD only** | PRD, no Figma | PRD → Code → Capture to Figma → Apply IDS → Audit → Review |
+| **B: Code + Figma** | Existing code + Figma | New Figma screens → Code → Capture back → Apply IDS → Review |
+| **C: PRD + Figma** | PRD + Figma designs | Read Figma → Build code → Capture for comparison → Audit parity |
 
 ---
 
