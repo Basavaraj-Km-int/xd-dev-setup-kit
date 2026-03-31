@@ -9,17 +9,22 @@ You are a design-engineering partner for Product Designers at Intuit. You solve 
 ```text
 project-root/
 ├── CLAUDE.md                 # You are here
+├── .storybook/
+│   ├── main.ts               # Storybook config (framework, addons, stories glob)
+│   └── preview.tsx            # IDS theme wrapper + token imports for stories
 ├── docs/
 │   ├── PRD.md                # Product requirements (designer fills in)
 │   └── design.md             # Design artifacts (problem, flows, stories)
 ├── src/
-│   ├── components/           # Prototype components (custom only, not IDS)
+│   ├── components/           # Custom components + .stories.tsx files
+│   │   └── .story-template.tsx  # Copy this to create stories for new components
 │   ├── pages/                # Page-level views
 │   ├── layouts/              # Layout templates
 │   ├── hooks/                # Custom React hooks
 │   ├── mocks/
 │   │   ├── data/             # JSON fixtures
-│   │   └── handlers.ts       # MSW mock API handlers
+│   │   ├── handlers.ts       # MSW mock API handlers
+│   │   └── browser.ts        # MSW service worker setup
 │   ├── lib/                  # Utilities
 │   └── styles/               # Global styles, token overrides
 ├── public/                   # Static assets
@@ -175,15 +180,107 @@ SCSS mixins: `@include breakpoint-up(sm)`, `breakpoint-down(md)`, `breakpoint-be
 
 ---
 
+## Storybook (Component Documentation)
+
+Every custom component gets a `.stories.tsx` file for documentation, visual testing, and frontend handover.
+
+### When to Write Stories
+
+- **Always**: for custom components built with IDS tokens (not IDS components themselves -- they already have stories)
+- **After building**: create stories once the component works in the prototype
+- **Template**: copy `src/components/.story-template.tsx` and rename to `ComponentName.stories.tsx`
+
+### Story Structure
+
+```tsx
+import type { Meta, StoryObj } from '@storybook/react';
+import StatusBadge from './StatusBadge';
+
+const meta = {
+  title: 'Components/StatusBadge',
+  component: StatusBadge,
+  tags: ['autodocs'],   // auto-generates prop documentation
+} satisfies Meta<typeof StatusBadge>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = { args: { status: 'active' } };
+export const Error: Story = { args: { status: 'error' } };
+```
+
+### IDS Theming
+
+`.storybook/preview.tsx` loads IDS tokens and wraps every story in `<div data-theme="intuit" data-colorscheme="light">`. Stories render with full IDS visual parity.
+
+### MCP Addon
+
+`@storybook/addon-mcp` is installed. When Storybook is running on port 6006, Claude Code can generate and preview stories via MCP.
+
+---
+
+## MSW (Mock API)
+
+MSW (Mock Service Worker) intercepts `fetch()` calls in the browser and returns mock responses. Components use standard `fetch('/api/...')` -- no special imports needed.
+
+### Adding Mock Endpoints
+
+Edit `src/mocks/handlers.ts`:
+
+```typescript
+import { http, HttpResponse } from 'msw';
+
+export const handlers = [
+  http.get('/api/users', () => {
+    return HttpResponse.json([
+      { id: '1', name: 'Alice Johnson', email: 'alice@example.com' },
+    ]);
+  }),
+];
+```
+
+### Enabling MSW
+
+Import and start the worker in `src/main.tsx`:
+
+```typescript
+import { worker } from './mocks/browser';
+worker.start();
+```
+
+### Realistic Delays
+
+```typescript
+http.get('/api/data', async () => {
+  await delay(800); // simulate network latency
+  return HttpResponse.json({ ... });
+});
+```
+
+When connecting to a real API later, remove the MSW import from `main.tsx` -- no component code changes needed.
+
+---
+
 ## Figma Integration
 
 We use the **official Figma Remote MCP** (`figma-remote-mcp` at `https://mcp.figma.com/mcp`).
+
+The `figma@claude-plugins-official` plugin (installed globally) provides 7 skills that load automatically:
+- `figma-use` -- foundational skill for all canvas write operations
+- `figma-generate-design` -- capture live UI into Figma
+- `figma-implement-design` -- translate Figma designs into code
+- `figma-generate-library` -- build design system libraries in Figma
+- `figma-create-design-system-rules` -- create governance rule files
+- `figma-code-connect-components` -- connect Figma components to code
+- `figma-create-new-file` -- create new Figma files
 
 ### Canvas → Code (`get_design_context`)
 
 - When given a Figma URL, use Figma MCP to read the design directly
 - Extract layout, spacing, components, styles, tokens
 - Map: Auto-layout→flexbox, Frames→div, Components→React, Variants→props
+- Use `search_design_system` to find components in connected IDS libraries
+- Use `get_variable_defs` to extract IDS token values from the file
 
 ### Code → Canvas (`generate_figma_design`)
 
@@ -192,7 +289,36 @@ We use the **official Figma Remote MCP** (`figma-remote-mcp` at `https://mcp.fig
 - Capture each state separately (default, loading, empty, error, success)
 - Capture the full flow -- one per step in the user journey
 - Name captures clearly: "Onboarding - Step 1", "Dashboard - Empty State"
-- This is a conversation artifact, not a handoff. Designer refines in Figma, then you implement the refined design.
+
+### Canvas Write (`use_figma`)
+
+- Create, edit, delete, or inspect Figma objects directly on the canvas
+- Instance IDS components from connected libraries
+- Set auto layout, bind variables, apply styles
+- The `figma-use` skill loads automatically before any `use_figma` call
+- Use after `generate_figma_design` to refine captured UI with real IDS components
+
+### Code Connect
+
+- Use `get_code_connect_map` to see existing Figma→code mappings
+- Use `add_code_connect_map` to connect IDS Figma components to `@ids-ts/*` imports
+- Use `create_design_system_rules` to generate rule files for consistent code generation
+
+### Design ↔ Code Loop
+
+The full bidirectional workflow for prototype iteration:
+
+| Step | Tool | What happens |
+|------|------|-------------|
+| 1 | `npm run dev` | Run prototype locally |
+| 2 | `generate_figma_design` | Capture live UI into Figma for designer review |
+| 3 | Designer annotates in Figma | Feedback directly on the canvas |
+| 4 | `use_figma` | Agent applies IDS components, fixes layout, binds variables |
+| 5 | `get_design_context` | Agent reads the refined Figma design |
+| 6 | Code changes | Agent implements refinements in code |
+| 7 | Repeat from step 2 | |
+
+This loop keeps code and design in sync. The Figma file is a living conversation artifact, not a static handoff.
 
 ---
 
@@ -259,8 +385,10 @@ Every component: `default | hover | focus | active | disabled | loading | error 
 
 ```bash
 # Development
-npm run dev              # Start dev server (usually http://localhost:5173)
+npm run dev              # Start dev server (http://localhost:5173)
+npm run storybook        # Start Storybook (http://localhost:6006)
 npm run build            # Production build
+npm run build-storybook  # Build Storybook for deployment/sharing
 npm run preview          # Preview production build locally
 
 # Quality
@@ -332,7 +460,7 @@ git diff                 # See unstaged changes
 ### Safe to do without asking:
 
 - Read files, search code, explore the project
-- `npm run dev`, `npm run build`, `npm run lint`, `npm run test`
+- `npm run dev`, `npm run storybook`, `npm run build`, `npm run lint`, `npm run test`
 - `git status`, `git log`, `git diff`
 - Create new files in `src/`
 - Edit existing source files in `src/`
