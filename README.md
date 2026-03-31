@@ -12,9 +12,10 @@ AI-powered prototyping environment for Intuit Product Designers. Scaffold a proj
 2. Installs **IDS components** (`@ids-ts/button`, `@ids-ts/badge`, `@ids-ts/typography`)
 3. Downloads **real IDS design tokens** from the Intuit CDN
 4. Configures **PostCSS** to match the IDS build pipeline
-5. Sets up **CLAUDE.md** with instructions for AI-assisted prototyping
-6. Sets up **Storybook MCP proxy** for AI-powered component lookup (no IDS clone needed)
-7. Provides **admin UI overrides** (softer shadows/borders for dashboards)
+5. Sets up **Storybook** with IDS theming for component docs, visual testing, and frontend handover
+6. Sets up **CLAUDE.md** with instructions for AI-assisted prototyping
+7. Sets up **Storybook MCP proxy** for AI-powered component lookup (no IDS clone needed)
+8. Provides **admin UI overrides** (softer shadows/borders for dashboards)
 
 Your prototype uses the same components and tokens that developers use in production.
 
@@ -159,6 +160,7 @@ This takes ~2 minutes. The script:
 - Downloads design tokens for all 6 Intuit brands
 - Sets up PostCSS to match the IDS build pipeline
 - Creates the Storybook MCP proxy for component lookup
+- Sets up Storybook with IDS theming, MCP addon, and story template
 - Writes starter files with accessibility baked in
 
 **After this step, your project is fully set up.** You don't need to run any more install commands.
@@ -213,6 +215,8 @@ Then paste this prompt:
 | **CSS** | CSS Modules + PostCSS | — |
 | **Routing** | React Router | 7.x |
 | **PostCSS** | postcss-mixins, postcss-nested, postcss-simple-vars | Matches IDS |
+| **Storybook** | Storybook + @storybook/addon-mcp | 8.x |
+| **Mocking** | MSW (Mock Service Worker) | 2.x |
 
 ---
 
@@ -238,6 +242,9 @@ my-prototype/
 │       ├── ids-overrides.css # Admin UI adjustments
 │       ├── ids-imports.css   # IDS component CSS
 │       └── global.css        # Base styles
+├── .storybook/
+│   ├── main.ts               # Storybook config (framework, addons, stories glob)
+│   └── preview.tsx            # IDS theme wrapper + token imports
 ├── ids-storybook-mcp-proxy/  # Storybook MCP proxy (5MB, no IDS clone needed)
 ├── vite.config.ts            # Vite with IDS optimizations
 ├── postcss.config.js         # Matches IDS build pipeline
@@ -357,7 +364,9 @@ claude mcp add storybook-mcp --transport http http://localhost:6006/mcp --scope 
 ```bash
 # Development
 npm run dev              # Start dev server (http://localhost:5173)
+npm run storybook        # Start Storybook (http://localhost:6006)
 npm run build            # Production build (fast navigation)
+npm run build-storybook  # Build Storybook for deployment/sharing
 npm run preview          # Preview production build (http://localhost:4173)
 npm run lint             # Lint code
 
@@ -378,6 +387,54 @@ git push                 # Push to remote
 | **Use for** | Active coding with hot reload | Demos, stakeholder reviews |
 | **Navigation speed** | Slower (Vite compiles on-demand) | Instant (<160ms) |
 | **URL** | `http://localhost:5173` | `http://localhost:4173` |
+
+---
+
+## Storybook (Component Documentation + Visual Testing)
+
+Every custom component gets a `.stories.tsx` file alongside its source. Storybook serves as:
+
+- **Component catalog**: Browse every component with interactive controls (props, states, themes)
+- **Visual testing**: Review all states (default, hover, error, empty, loading) in isolation
+- **Frontend handover**: Engineers can inspect exact props, tokens, and behavior before building
+- **MCP addon**: Claude Code can generate and preview stories via `@storybook/addon-mcp`
+
+### Quick Start
+
+```bash
+npm run storybook        # Start at http://localhost:6006
+npm run build-storybook  # Build static site for sharing
+```
+
+### Writing Stories for Custom Components
+
+Copy the template: `src/components/.story-template.tsx`
+
+```tsx
+// src/components/StatusBadge/StatusBadge.stories.tsx
+import type { Meta, StoryObj } from '@storybook/react';
+import StatusBadge from './StatusBadge';
+
+const meta = {
+  title: 'Components/StatusBadge',
+  component: StatusBadge,
+  tags: ['autodocs'],
+  argTypes: {
+    status: { control: 'select', options: ['active', 'pending', 'error'] },
+  },
+} satisfies Meta<typeof StatusBadge>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Active: Story = { args: { status: 'active' } };
+export const Pending: Story = { args: { status: 'pending' } };
+export const Error: Story = { args: { status: 'error' } };
+```
+
+### IDS Theme in Storybook
+
+The `.storybook/preview.tsx` loads IDS tokens and wraps every story in `<div data-theme="intuit" data-colorscheme="light">`. Components render with full IDS visual parity — same as the dev server.
 
 ---
 
@@ -489,5 +546,6 @@ curl -s "https://uxfabric.intuitcdn.net/components/design-systems/tokens/ddms3.0
 
 | Date | Change |
 |------|--------|
+| 2026-03-31 | v3: Added Storybook with IDS theming, MCP addon, story template, MSW mock API |
 | 2026-03-19 | v2: React 18, CDN tokens, PostCSS pipeline, Storybook MCP, admin overrides |
 | 2026-03-01 | v1: Initial scaffold with Vite + React + IDS reference |

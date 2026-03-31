@@ -22,7 +22,7 @@ echo "=================================================="
 # Step 1: Scaffold Vite + React 18 + TypeScript
 # -------------------------------------------------------------------
 echo ""
-echo "Step 1/7: Creating React + TypeScript project..."
+echo "Step 1/8: Creating React + TypeScript project..."
 
 TEMP_DIR="/tmp/xd-scaffold-$$"
 rm -rf "$TEMP_DIR"
@@ -52,7 +52,7 @@ echo "  Done."
 # Step 2: Create project structure
 # -------------------------------------------------------------------
 echo ""
-echo "Step 2/7: Creating project structure..."
+echo "Step 2/8: Creating project structure..."
 
 mkdir -p docs
 mkdir -p src/{components,pages,layouts,hooks,mocks/data,lib,styles}
@@ -64,7 +64,7 @@ echo "  Done."
 # Step 3: Downgrade React to 18.2.0 (IDS compatibility)
 # -------------------------------------------------------------------
 echo ""
-echo "Step 3/7: Installing React 18.2.0 (required for IDS compatibility)..."
+echo "Step 3/8: Installing React 18.2.0 (required for IDS compatibility)..."
 
 npm install react@18.2.0 react-dom@18.2.0 @types/react@18.2.48 @types/react-dom@18.2.18 2>/dev/null
 echo "  Done."
@@ -73,7 +73,7 @@ echo "  Done."
 # Step 4: Install IDS packages + PostCSS + Router
 # -------------------------------------------------------------------
 echo ""
-echo "Step 4/7: Installing IDS components and dependencies..."
+echo "Step 4/8: Installing IDS components and dependencies..."
 
 # Core IDS components that work well with Vite
 npm install @ids-ts/button @ids-ts/badge @ids-ts/typography @ids-ts/loader 2>/dev/null
@@ -87,13 +87,16 @@ npm install -D postcss-mixins@9.0.4 postcss-nested@6.0.1 postcss-simple-vars@7.0
 # Mock Service Worker (intercepts API calls with fake responses)
 npm install -D msw 2>/dev/null
 
+# Storybook (component documentation, visual testing, frontend handover)
+npm install -D storybook @storybook/react-vite @storybook/addon-essentials @storybook/addon-mcp 2>/dev/null
+
 echo "  Done."
 
 # -------------------------------------------------------------------
 # Step 5: Download IDS design tokens from CDN (all brands)
 # -------------------------------------------------------------------
 echo ""
-echo "Step 5/7: Downloading IDS design tokens for all brands..."
+echo "Step 5/8: Downloading IDS design tokens for all brands..."
 
 mkdir -p src/styles/tokens
 for brand in $IDS_BRANDS; do
@@ -109,7 +112,7 @@ echo "  Default theme: intuit (change in src/main.tsx to use another brand)"
 # Step 6: Create configuration files
 # -------------------------------------------------------------------
 echo ""
-echo "Step 6/7: Creating configuration files..."
+echo "Step 6/8: Creating configuration files..."
 
 # Vite config with IDS optimizations
 cat > vite.config.ts << 'VITEEOF'
@@ -347,6 +350,9 @@ int-design-system/
 *.swp
 *.swo
 
+# Storybook build output
+storybook-static/
+
 # OS
 .DS_Store
 Thumbs.db
@@ -355,10 +361,113 @@ GITEOF
 echo "  Done."
 
 # -------------------------------------------------------------------
-# Step 7: Set up IDS Storybook MCP Proxy (for component reference)
+# Step 7: Set up Storybook (component docs + visual testing)
 # -------------------------------------------------------------------
 echo ""
-echo "Step 7/7: Setting up IDS Storybook MCP proxy..."
+echo "Step 7/8: Setting up Storybook..."
+
+mkdir -p .storybook
+
+cat > .storybook/main.ts << 'SBMAINEOF'
+import type { StorybookConfig } from '@storybook/react-vite';
+
+const config: StorybookConfig = {
+  stories: ['../src/**/*.stories.@(ts|tsx)'],
+  addons: [
+    '@storybook/addon-essentials',
+    '@storybook/addon-mcp',
+  ],
+  framework: '@storybook/react-vite',
+};
+
+export default config;
+SBMAINEOF
+
+cat > .storybook/preview.tsx << 'SBPREVEOF'
+import type { Preview } from '@storybook/react';
+import '../src/styles/ids-tokens.css';
+import '../src/styles/ids-overrides.css';
+import '../src/styles/ids-imports.css';
+import '../src/styles/global.css';
+
+const preview: Preview = {
+  parameters: {
+    controls: {
+      matchers: {
+        color: /(background|color)$/i,
+        date: /Date$/i,
+      },
+    },
+  },
+  decorators: [
+    (Story) => (
+      <div data-theme="intuit" data-colorscheme="light">
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+export default preview;
+SBPREVEOF
+
+# Add Storybook npm scripts to package.json
+node -e "
+const fs = require('fs');
+const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
+pkg.scripts = pkg.scripts || {};
+pkg.scripts.storybook = 'storybook dev -p 6006';
+pkg.scripts['build-storybook'] = 'storybook build';
+fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2) + '\n');
+"
+
+# Sample story template (copy this when creating stories for custom components)
+cat > src/components/.story-template.tsx << 'STORYEOF'
+// Copy this file when creating stories for a new custom component.
+// Rename to: ComponentName.stories.tsx
+//
+// Storybook docs: https://storybook.js.org/docs/writing-stories
+// Run: npm run storybook
+
+import type { Meta, StoryObj } from '@storybook/react';
+// import YourComponent from './YourComponent';
+
+const meta = {
+  title: 'Components/YourComponent',
+  // component: YourComponent,
+  tags: ['autodocs'],
+  argTypes: {
+    // Define controls for each prop:
+    // size: { control: 'select', options: ['small', 'medium', 'large'] },
+    // label: { control: 'text' },
+    // disabled: { control: 'boolean' },
+  },
+} satisfies Meta; // satisfies Meta<typeof YourComponent>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+// Default state
+export const Default: Story = {
+  args: {
+    // label: 'Click me',
+  },
+};
+
+// All visual variants (for design review)
+// export const Showcase: Story = { ... };
+
+// Specific feature demo
+// export const WithIcon: Story = { ... };
+STORYEOF
+
+echo "  Done."
+
+# -------------------------------------------------------------------
+# Step 8: Set up IDS Storybook MCP Proxy (for component reference)
+# -------------------------------------------------------------------
+echo ""
+echo "Step 8/8: Setting up IDS Storybook MCP proxy..."
 
 MCP_PROXY_DIR="ids-storybook-mcp-proxy"
 
@@ -443,7 +552,9 @@ echo "=================================================="
 echo ""
 echo "Quick start:"
 echo "  npm run dev             Start dev server (http://localhost:5173)"
+echo "  npm run storybook       Start Storybook (http://localhost:6006)"
 echo "  npm run build           Production build"
+echo "  npm run build-storybook Build Storybook for deployment"
 echo "  npm run preview         Preview production build (fast navigation)"
 echo ""
 echo "Next steps:"
@@ -452,6 +563,7 @@ echo "  2. Start IDS MCP: cd ids-storybook-mcp-proxy && node server.js"
 echo "  3. Connect MCP: claude mcp add ids-storybook --transport http http://localhost:6007/mcp"
 echo "  4. Run: npm run dev"
 echo "  5. Open Claude Code and say: 'Read the PRD and build the prototype'"
+echo "  6. Run: npm run storybook (to view component stories)"
 echo ""
 echo "IDS components available:"
 echo "  import Button from '@ids-ts/button';"
