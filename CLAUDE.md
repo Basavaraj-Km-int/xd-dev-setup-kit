@@ -265,6 +265,10 @@ When connecting to a real API later, remove the MSW import from `main.tsx` -- no
 
 We use the **official Figma Remote MCP** (`figma-remote-mcp` at `https://mcp.figma.com/mcp`).
 
+**IDS Figma Library Keys** (use with `search_design_system` and `use_figma`):
+- Web Components: `VO8rsMYDqsDY44J9yEVyES9Y`
+- Foundations & Tokens: `Q0HemoQpvXxl4pB3YA7VDZ`
+
 The `figma@claude-plugins-official` plugin (installed globally) provides 7 skills that load automatically:
 - `figma-use` -- foundational skill for all canvas write operations
 - `figma-generate-design` -- capture live UI into Figma

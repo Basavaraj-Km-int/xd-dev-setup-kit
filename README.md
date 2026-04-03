@@ -451,7 +451,11 @@ The `.storybook/preview.tsx` loads IDS tokens and wraps every story in `<div dat
 
 ## Figma Skills (IDS Design System Binding)
 
-Custom GTMXD skills in `Skills/` teach Claude Code to bind captured UI to IDS library components in Figma:
+Custom GTMXD skills in `Skills/` teach Claude Code to bind captured UI to IDS library components in Figma.
+
+**IDS Figma Library Keys** (used by skills for `search_design_system` and `use_figma`):
+- **Web Components**: `VO8rsMYDqsDY44J9yEVyES9Y` — all IDS components
+- **Foundations & Tokens**: `Q0HemoQpvXxl4pB3YA7VDZ` — design tokens, color, spacing
 
 | Skill | Purpose | Use When |
 |---|---|---|
@@ -601,6 +605,7 @@ curl -s "https://uxfabric.intuitcdn.net/components/design-systems/tokens/ddms3.0
 
 | Date | Change |
 |------|--------|
+| 2026-04-03 | v4: GTMXD Figma skills, 3 workflows, IDS Figma library keys, Figma plugin docs |
 | 2026-03-31 | v3: Added Storybook with IDS theming, MCP addon, story template, MSW mock API |
 | 2026-03-19 | v2: React 18, CDN tokens, PostCSS pipeline, Storybook MCP, admin overrides |
 | 2026-03-01 | v1: Initial scaffold with Vite + React + IDS reference |
