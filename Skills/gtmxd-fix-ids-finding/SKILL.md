@@ -9,6 +9,10 @@ Fix one specific IDS compliance finding from a `gtmxd-audit-ids` report.
 
 **Scope**: One finding, one node, minimal read/write. Use `gtmxd-apply-ids` for broader multi-section work.
 
+**IDS Figma Library Keys:**
+- **Web Components**: `VO8rsMYDqsDY44J9yEVyES9Y`
+- **Foundations & Tokens**: `Q0HemoQpvXxl4pB3YA7VDZ`
+
 **Based on**: [edenspiekermann/Skills/fix-design-system-finding](https://github.com/edenspiekermann/Skills/tree/main/skills/fix-design-system-finding)
 
 ---

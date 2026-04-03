@@ -13,6 +13,10 @@ Post-process Figma designs to replace raw frames with IDS library component inst
 - `figma-use` — Plugin API rules (mandatory before every `use_figma` call)
 - `figma-generate-library` — if building new IDS components in Figma
 
+**IDS Figma Library Keys:**
+- **Web Components**: `VO8rsMYDqsDY44J9yEVyES9Y` — all IDS components (Button, Badge, Typography, etc.)
+- **Foundations & Tokens**: `Q0HemoQpvXxl4pB3YA7VDZ` — design tokens, color, spacing, elevation
+
 **Based on**: [edenspiekermann/Skills/apply-design-system](https://github.com/edenspiekermann/Skills/tree/main/skills/apply-design-system)
 
 ---
@@ -122,7 +126,19 @@ Use `use_figma` to inspect:
 
 ### 5. Search IDS Library
 
-Use `search_design_system` to find IDS components. Search tips:
+Use `search_design_system` with the IDS Web Components file key:
+
+```
+search_design_system(fileKey: "VO8rsMYDqsDY44J9yEVyES9Y", query: "Button")
+search_design_system(fileKey: "VO8rsMYDqsDY44J9yEVyES9Y", query: "Badge")
+```
+
+For tokens/variables:
+```
+get_variable_defs(fileKey: "Q0HemoQpvXxl4pB3YA7VDZ")
+```
+
+Search tips:
 - Search by IDS component name: "Button", "Badge", "Typography"
 - Narrow by variant: "Button primary", "Badge status"
 - Results may include non-IDS libraries — filter for IDS results

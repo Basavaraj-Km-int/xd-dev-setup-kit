@@ -9,6 +9,10 @@ Read-only audit of a Figma design for IDS integration drift. Produces a report o
 
 **When to use**: Before Workflow B handoff (verifying Figma ↔ code parity), after `generate_figma_design` capture (checking what needs IDS binding), or as a design review checkpoint.
 
+**IDS Figma Library Keys:**
+- **Web Components**: `VO8rsMYDqsDY44J9yEVyES9Y`
+- **Foundations & Tokens**: `Q0HemoQpvXxl4pB3YA7VDZ`
+
 **Based on**: [edenspiekermann/Skills/audit-design-system](https://github.com/edenspiekermann/Skills/tree/main/skills/audit-design-system)
 
 ---
@@ -26,7 +30,7 @@ Call these Figma MCP tools:
 2. `get_screenshot` — for visual confirmation
 3. `get_variable_defs` — to check which IDS variables are bound
 4. `get_metadata` — for large/repeated nodes, map nested instances
-5. `search_design_system` — when a likely non-IDS primitive is found, search for IDS replacement
+5. `search_design_system(fileKey: "VO8rsMYDqsDY44J9yEVyES9Y", query: "...")` — search IDS Web Components for replacement
 
 ### 3. Review for IDS-Specific Issues
 
